@@ -1,0 +1,58 @@
+package movie_ticket_booking;
+
+import java.util.*;
+import java.io.*;
+public class UserMethod{
+	static Scanner sc=new Scanner(System.in);
+	public static void manageUser() {
+	   System.out.println("YOUR CHOICE IS:'Manage User'");
+	   System.out.println("SELECT YOUR OPERATION FOR USER:");
+	   System.out.println("A.Add User");
+       System.out.println("B.View User");
+       System.out.println("C.Update User");
+       System.out.println("D.Delete User");
+       System.out.println("ENTER YOUR CHOICE(A/B/C/D):");
+       String action=sc.nextLine().trim().toLowerCase();//trim will remove extra spaces if presented
+       switch(action) {
+       case "a":
+    	   System.out.println("Enter Firstname: ");
+    	   String fn=sc.nextLine();
+    	   System.out.println("Enter Lastname: ");
+    	   String ln=sc.nextLine();
+    	   System.out.println("Enter PhoneNumber: ");
+    	   String pn=sc.nextLine();
+    	   System.out.println("Enter Password: ");
+    	   String pd=sc.nextLine();
+    	   System.out.println("DO YOU WANT TO SAVE(YES/NO)?");
+    	   String save=sc.nextLine().toLowerCase();
+    	   if(save.equalsIgnoreCase("yes")) {
+    	   try {
+    		   int id=1;
+    		   File file=new File("userinfo.txt");
+    		   if(file.exists()) {
+    		   BufferedReader br=new BufferedReader(new FileReader(file));
+    		   String line;
+    		   int count=0;
+    		   while((line=br.readLine())!=null) {
+    			   if (!line.trim().isEmpty()) {
+                       count++;
+                   }
+    		   }
+    		   br.close();
+               id = count + 1; // next id  
+    		   }    		   
+    		   System.out.println("-->YOUR ID IS: "+id);
+    		   BufferedWriter bw=new BufferedWriter(new FileWriter("userinfo.txt",true));//FileWriter should be opened in append mode if you want to add multiple users
+    		   bw.write(id + "," + fn + "," + ln + "," + pn + "," + pd);
+    		   bw.newLine();
+    		   bw.close();
+    		   System.out.println("User Saved Successfully!");
+    	   }catch(Exception e){
+			   System.out.println("CANNOT BE INSERTED!");
+		   }
+    	   }
+    	   break;
+    	   
+       }
+	 }	
+}
