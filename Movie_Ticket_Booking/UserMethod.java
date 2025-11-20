@@ -25,6 +25,15 @@ public class UserMethod{
     	   String pd=sc.nextLine();
     	   System.out.println("DO YOU WANT TO SAVE(YES/NO)?");
     	   String save=sc.nextLine().toLowerCase();
+		   String status;
+		   if(save.equalsIgnoreCase("yes")) {
+			   status="Active";
+		   }
+		   else {
+			   status="Inactive";  
+		   }
+		   System.out.println("-->Your Status is: "+status);
+    	   
     	   if(save.equalsIgnoreCase("yes")) {
     	   try {
     		   int id=1;
@@ -40,10 +49,10 @@ public class UserMethod{
     		   }
     		   br.close();
                id = count + 1; // next id  
-    		   }    		   
+    		   }  
     		   System.out.println("-->YOUR ID IS: "+id);
     		   BufferedWriter bw=new BufferedWriter(new FileWriter("userinfo.txt",true));//FileWriter should be opened in append mode if you want to add multiple users
-    		   bw.write(id + "," + fn + "," + ln + "," + pn + "," + pd);
+    		   bw.write(id + "," + fn + "," + ln + "," + pn + "," + pd + "," + status);
     		   bw.newLine();
     		   bw.close();
     		   System.out.println("User Saved Successfully!");
@@ -51,8 +60,25 @@ public class UserMethod{
 			   System.out.println("CANNOT BE INSERTED!");
 		   }
     	   }
+    	   else {
+    		   System.out.println("User Not Saved Successfully!");
+    	   }
     	   break;
-    	   
+       case "b":System.out.println("Enter Your Id: ");
+                int eid=sc.nextInt();
+                try {
+                	File file=new File("userinfo.txt");
+                	BufferedReader br=new BufferedReader(new FileReader(file));
+                	String line;
+                	while((line=br.readLine())!=null) {
+                		if(file.equals(eid)) {
+                		System.out.println(line);
+                	 }
+                	}
+                }catch(Exception e){
+                	System.out.println("CANNOT BE VIEWED");
+                }
+                break;
        }
 	 }	
 }
