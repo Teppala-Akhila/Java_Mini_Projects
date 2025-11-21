@@ -15,6 +15,7 @@ public class UserMethod{
        String action=sc.nextLine().trim().toLowerCase();//trim will remove extra spaces if presented
        switch(action) {
        case "a":
+    	   System.out.println("You Selected To Register");
     	   System.out.println("Enter Firstname: ");
     	   String fn=sc.nextLine();
     	   System.out.println("Enter Lastname: ");
@@ -64,21 +65,54 @@ public class UserMethod{
     		   System.out.println("User Not Saved Successfully!");
     	   }
     	   break;
-       case "b":System.out.println("Enter Your Id: ");
-                int eid=sc.nextInt();
+       case "b":System.out.println("You Selected To Review Your Data");
+    	        System.out.println("Enter Your Id: ");
+                int vid=sc.nextInt();
+                try {
+                	File file=new File("userinfo.txt");
+                	BufferedReader br=new BufferedReader(new FileReader(file));
+                	String line;
+                	boolean found=false;
+                	while((line=br.readLine())!=null) {
+                		if(!line.trim().isEmpty()) {
+                			String parts[]=line.split(",");
+                			int id=Integer.parseInt(parts[0].trim());
+                			if(id==vid) {
+                		       System.out.println(line.trim());
+                		       found=true;
+                		       break;
+                			}
+                		}
+                }
+                br.close();
+                if(!found) {
+                	System.out.println("User Not Found With Id "+vid);
+                }
+                }catch(Exception e){
+                	System.out.println("CANNOT BE VIEWED");
+                }
+                break;
+       case "d":System.out.println("You Selected To Delete Your Data");
+                System.out.println("Enter Your Id: ");
+                int did=sc.nextInt();
                 try {
                 	File file=new File("userinfo.txt");
                 	BufferedReader br=new BufferedReader(new FileReader(file));
                 	String line;
                 	while((line=br.readLine())!=null) {
-                		if(file.equals(eid)) {
-                		System.out.println(line);
-                	 }
+                		if(!line.trim().isEmpty()) {
+                			String parts[]=line.split(",");
+                			int id=Integer.parseInt(parts[0].trim());
+                			String stat=parts[5];
+                			if(id==did) {
+                				stat="Inactive";
+                				BufferedWriter bw=new BufferedWriter(new FileWriter(file));
+                				parts[5]=bw.write(stat);
+                			}
+                			
+                		}
                 	}
-                }catch(Exception e){
-                	System.out.println("CANNOT BE VIEWED");
                 }
-                break;
        }
 	 }	
 }
