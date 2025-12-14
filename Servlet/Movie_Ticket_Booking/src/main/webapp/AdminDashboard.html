@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard - Movie Ticket Booking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9fafb;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* NAVBAR */
+    header {
+      background-color: #1f2933;
+      color: white;
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    nav a {
+      color: #e5e7eb;
+      margin-right: 15px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+    }
+
+    .search-box input {
+      padding: 6px 10px;
+      border: 1px solid #ccc;
+      border-right: none;
+      border-radius: 4px 0 0 4px;
+      outline: none;
+    }
+
+    .search-box button {
+      padding: 7px 12px;
+      background-color: #111827;
+      color: #fff;
+      border: 1px solid #111827;
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+    }
+
+    /* MAIN CONTENT */
+    main {
+      padding: 40px;
+    }
+
+    h2 {
+      font-size: 24px;
+      color: #111827;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+      padding: 14px;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    th {
+      background-color: #1f2933;
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #f3f4f6;
+    }
+
+    select {
+      padding: 6px 10px;
+      border-radius: 5px;
+      border: 1px solid #d1d5db;
+      background-color: #f9fafb;
+      cursor: pointer;
+    }
+
+    .btn-update {
+      background-color: #facc15;
+      color: #111827;
+      border: none;
+      border-radius: 5px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .btn-update:hover {
+      background-color: #eab308;
+    }
+
+    footer {
+      background-color: #111827;
+      color: #9ca3af;
+      text-align: center;
+      padding: 14px 0;
+      font-size: 13px;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 768px) {
+      main {
+        padding: 20px;
+      }
+
+      table {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="brand">Movie Ticket Booking</div>
+  <nav>
+    <a href="Movies.html">Movies</a>
+    <a href="MyBookings.html">My Bookings</a>
+    <a href="TheatreDashboard.html">Theatres</a>
+    <a href="#">Admin</a>
+  </nav>
+  <div class="search-box">
+    <input type="text" placeholder="Search movies...">
+    <button>🔍</button>
+  </div>
+</header>
+
+<main>
+  <h2>Admin Dashboard (Application Admin)</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>User ID</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>admin</td>
+        <td>admin@example.com</td>
+        <td>APPLICATION_ADMIN</td>
+        <td>
+          <select>
+            <option>Normal User</option>
+            <option>Theatre Admin</option>
+            <option selected>Application Admin</option>
+          </select>
+          <button class="btn-update">Update</button>
+        </td>
+      </tr>
+
+      <tr>
+        <td>2</td>
+        <td>theatre_admin</td>
+        <td>theatre@example.com</td>

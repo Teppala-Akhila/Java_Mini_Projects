@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Movies List - Movie Ticket Booking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background-color: #f5f5f5;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #1f2933;
+      color: #fff;
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .movie-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+      padding: 40px;
+    }
+
+    .card {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      width: 220px;
+      overflow: hidden;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card img {
+      width: 100%;
+      height: 330px;
+      object-fit: cover;
+    }
+
+    .card h3 {
+      font-size: 18px;
+      margin: 10px 0 4px;
+      color: #111827;
+    }
+
+    .card p {
+      font-size: 13px;
+      color: #6b7280;
+      padding: 0 10px;
+      height: 40px;
+    }
+
+    .btn {
+      background-color: #2563eb;
+      border: none;
+      color: white;
+      padding: 7px 14px;
+      border-radius: 4px;
+      margin: 10px 0 15px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #1d4ed8;
+    }
+
+    footer {
+      background-color: #111827;
+      color: #9ca3af;
+      text-align: center;
+      padding: 15px 0;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">Movie Ticket Booking</div>
+  <div>Movies List</div>
+</header>
+
+<main>
+  <section class="movie-container">
+    <div class="card">
+      <img src="https://wallpaperaccess.com/full/13611618.jpg" alt="Hi Nanna">
+      <h3>Hi Nanna</h3>
+      <p>A superhero movie about Batman.</p>
+      <button class="btn">Book Ticket</button>
+    </div>
+
+    <div class="card">
+      <img src="https://www.cinejosh.com/newsimg/newsmainimg/meet-shuddhi-from-8-vasanthalu_b_0706240946.jpg" alt="8 Vasanthalu">
+      <h3>8 Vasanthalu</h3>
+      <p>A sci-fi movie about dreams and reality.</p>
+      <button class="btn">Book Ticket</button>
+    </div>
+
+    <div class="card">
+      <img src="https://movie.webindia123.com/movie/2018/regional/march/Bharat-Ane-Nenu/poster/Bharat-Ane-Nenu3.jpg" alt="Bharath Ane Nenu">
+      <h3>Bharath Ane Nenu</h3>
+      <p>A cult classic with unforgettable stories.</p>
+      <button class="btn">Book Ticket</button>
+    </div>
+
+    <div class="card">
+      <img src="https://image.tmdb.org/t/p/original/hdpYUidbB83AfemP369W7guOIlr.jpg" alt="Devara">
+      <h3>Devara</h3>
+      <p>A crime saga about a powerful mafia family.</p>
+      <button class="btn">Book Ticket</button>
+    </div>
+  </section>
+</main>
+
+<footer>
+  © 2025 YP Movie Ticket Booking. All rights reserved.
+</footer>
+
+</body>
+</html>

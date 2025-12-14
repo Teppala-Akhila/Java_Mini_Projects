@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Show Selection - Movie Ticket Booking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9fafb;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* NAVBAR */
+    header {
+      background-color: #1f2933;
+      color: white;
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    nav a {
+      color: #e5e7eb;
+      margin-right: 15px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+    }
+
+    .search-box input {
+      padding: 6px 10px;
+      border: 1px solid #ccc;
+      border-right: none;
+      border-radius: 4px 0 0 4px;
+      outline: none;
+    }
+
+    .search-box button {
+      padding: 7px 12px;
+      background-color: #111827;
+      color: #fff;
+      border: 1px solid #111827;
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+    }
+
+    /* MAIN CONTENT */
+    main {
+      padding: 40px;
+    }
+
+    h2 {
+      font-size: 24px;
+      color: #111827;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+      padding: 14px;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    th {
+      background-color: #1f2933;
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #f1f5f9;
+    }
+
+    .btn {
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #1d4ed8;
+    }
+
+    footer {
+      background-color: #111827;
+      color: #9ca3af;
+      text-align: center;
+      padding: 14px 0;
+      font-size: 13px;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 768px) {
+      main { padding: 20px; }
+      table { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">Movie Ticket Booking</div>
+  <nav>
+    <a href="Movies.html">Movies</a>
+    <a href="#">My Bookings</a>
+  </nav>
+  <div class="search-box">
+    <input type="text" placeholder="Search movies...">
+    <button>🔍</button>
+  </div>
+</header>
+
+<main>
+  <h2>Select Show for Movie</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Theatre</th>
+        <th>Screen</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>Price</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>PVR Cinemas</td>
+        <td>Screen 1</td>
+        <td>2025-11-02 11:00:00</td>
+        <td>2025-11-02 13:28:00</td>
+        <td>250/-</td>
+        <td><button class="btn" onclick="window.location.href='SeatSelection.html'">Select Seats</button></td>
+      </tr>
+      <tr>
+        <td>INOX Multiplex</td>
+        <td>Screen 3</td>
+        <td>2025-11-02 14:00:00</td>
+        <td>2025-11-02 16:30:00</td>
+        <td>180/-</td>
+        <td><button class="btn" onclick="window.location.href='SeatSelection.html'">Select Seats</button></td>
+      </tr>
+    </tbody>
+  </table>
+</main>
+
+<footer>
+  © 2025 YP Movie Ticket Booking. All rights reserved.
+</footer>
+
+</body>
+</html>

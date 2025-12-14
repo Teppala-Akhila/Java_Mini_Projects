@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Booking Confirmation - Movie Ticket Booking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9fafb;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* NAVBAR */
+    header {
+      background-color: #1f2933;
+      color: white;
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    nav a {
+      color: #e5e7eb;
+      margin-right: 15px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+    }
+
+    .search-box input {
+      padding: 6px 10px;
+      border: 1px solid #ccc;
+      border-right: none;
+      border-radius: 4px 0 0 4px;
+      outline: none;
+    }
+
+    .search-box button {
+      padding: 7px 12px;
+      background-color: #111827;
+      color: #fff;
+      border: 1px solid #111827;
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+    }
+
+    /* MAIN CONTENT */
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: calc(100vh - 150px);
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h2 {
+      font-size: 26px;
+      color: #111827;
+      margin-bottom: 25px;
+    }
+
+    .card {
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      padding: 30px 50px;
+      width: 360px;
+    }
+
+    .card h3 {
+      font-size: 20px;
+      color: #111827;
+      margin-bottom: 15px;
+    }
+
+    .card p {
+      font-size: 14px;
+      color: #374151;
+      margin: 8px 0;
+    }
+
+    .btn {
+      background-color: #22c55e;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 18px;
+      font-size: 15px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    .btn:hover {
+      background-color: #16a34a;
+    }
+
+    footer {
+      background-color: #111827;
+      color: #9ca3af;
+      text-align: center;
+      padding: 14px 0;
+      font-size: 13px;
+      margin-top: 30px;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        width: 90%;
+        padding: 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">Movie Ticket Booking</div>
+  <nav>
+    <a href="Movies.html">Movies</a>
+    <a href="#">My Bookings</a>
+  </nav>
+  <div class="search-box">
+    <input type="text" placeholder="Search movies...">
+    <button>🔍</button>
+  </div>
+</header>
+
+<main>
+  <h2>Booking Confirmation</h2>
+
+  <div class="card">
+    <h3>Booking ID: 5</h3>
+    <p><strong>Show ID:</strong> 2</p>
+    <p><strong>Total Amount:</strong> $11.99</p>
+    <p><strong>Booking Time:</strong> 2025-11-25 19:38:58</p>
+
+    <button class="btn" onclick="window.print()">Download Ticket</button>
+  </div>
+</main>
+
+<footer>
+  © 2025 YP Movie Ticket Booking. All rights reserved.
+</footer>
+
+</body>
+</html>

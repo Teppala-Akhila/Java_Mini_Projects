@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Seat Selection - Movie Ticket Booking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9fafb;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* NAVBAR */
+    header {
+      background-color: #1f2933;
+      color: white;
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    nav a {
+      color: #e5e7eb;
+      margin-right: 15px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+    }
+
+    .search-box input {
+      padding: 6px 10px;
+      border: 1px solid #ccc;
+      border-right: none;
+      border-radius: 4px 0 0 4px;
+      outline: none;
+    }
+
+    .search-box button {
+      padding: 7px 12px;
+      background-color: #111827;
+      color: #fff;
+      border: 1px solid #111827;
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+    }
+
+    /* MAIN CONTENT */
+    main {
+      text-align: center;
+      padding: 50px 20px;
+    }
+
+    h2 {
+      font-size: 24px;
+      color: #111827;
+      margin-bottom: 25px;
+    }
+
+    .screen {
+      background-color: #e5e7eb;
+      width: 60%;
+      margin: 20px auto;
+      height: 12px;
+      border-radius: 4px;
+    }
+
+    .seat-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+    }
+
+    .seat {
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s, background-color 0.2s;
+    }
+
+    .seat.available {
+      background-color: #22c55e; /* green */
+    }
+
+    .seat.booked {
+      background-color: #ef4444; /* red */
+      cursor: not-allowed;
+    }
+
+    .seat.selected {
+      background-color: #2563eb; /* blue */
+    }
+
+    .seat.available:hover {
+      transform: scale(1.1);
+    }
+
+    .btn {
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .btn:hover {
+      background-color: #1d4ed8;
+    }
+
+    footer {
+      background-color: #111827;
+      color: #9ca3af;
+      text-align: center;
+      padding: 14px 0;
+      font-size: 13px;
+      margin-top: 60px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">Movie Ticket Booking</div>
+  <nav>
+    <a href="Movies.html">Movies</a>
+    <a href="#">My Bookings</a>
+  </nav>
+  <div class="search-box">
+    <input type="text" placeholder="Search movies...">
+    <button>🔍</button>
+  </div>
+</header>
+
+<main>
+  <h2>Select Seats for Show</h2>
+  <div class="screen"></div>
+
+  <div class="seat-container">
+    <div class="seat booked">A1</div>
+    <div class="seat available">A2</div>
+    <div class="seat available">A3</div>
+    <div class="seat available">A4</div>
+    <div class="seat available">A5</div>
+    <div class="seat available">B1</div>
+    <div class="seat available">B2</div>
+    <div class="seat available">B3</div>
+    <div class="seat available">B4</div>
+    <div class="seat available">B5</div>
+  </div>
+
+  <button class="btn" onclick="window.location.href='BookingConfirmation.html'">
+    Book Selected Seats
+  </button>
+</main>
+
+<footer>
+  © 2025 YP Movie Ticket Booking. All rights reserved.
+</footer>
+
+<script>
+  const seats = document.querySelectorAll('.seat.available');
+  seats.forEach(seat => {
+    seat.addEventListener('click', () => {
+      seat.classList.toggle('selected');
+    });
+  });
+</script>
+
+</body>
+</html>
