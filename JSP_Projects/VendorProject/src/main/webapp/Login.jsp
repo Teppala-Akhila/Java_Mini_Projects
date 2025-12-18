@@ -7,7 +7,7 @@
 <title>Login Form</title>
 </head>
 <body>
-	<form action="LoginServlet" method="post"></form>
+	<form action="LoginServlet" method="post">
 		<table>
 			<tr>
 			<td>UserName: </td> 
@@ -25,9 +25,15 @@
 		    </tr>
 		    <tr><td colspan="2"><br></td></tr>
 		    <tr>
-		    <td><input type="submit" value="Login"></td>
-		    <td><input type="submit" value="Register"></td>
-		    </tr>
+            <td>
+                <input type="submit" value="Login">
+            </td>
+            <td>
+                <a href="Register.jsp">
+                    <button type="button">Register</button>
+                </a>
+            </td>
+        </tr>
 		</table>
 	</form>
 </body>

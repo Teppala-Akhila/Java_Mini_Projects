@@ -29,16 +29,16 @@ public class RegisterServlet extends HttpServlet {
 
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String uname=request.getParameter("uname");
-		String pass=request.getParameter("pass");
+		String uname=request.getParameter("uname").trim();
+		String pass=request.getParameter("pass").trim();
 		LoginModel um = new LoginModel(uname,pass);
 		
 		LoginDao ud=new LoginDao();
         try {
 			if (ud.Register(um)) {
-			    response.sendRedirect("login.jsp");
+			    response.sendRedirect("Login.jsp");
 			} else {
-			    response.sendRedirect("error.jsp");
+			    response.sendRedirect("Error.jsp");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

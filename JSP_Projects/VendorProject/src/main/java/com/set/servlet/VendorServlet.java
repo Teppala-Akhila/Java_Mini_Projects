@@ -23,7 +23,7 @@ public class VendorServlet extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		//response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	
@@ -37,8 +37,10 @@ public class VendorServlet extends HttpServlet {
 	        VendorDao vd = new VendorDao();
 	        vd.saveVendor(v);
 
-	        response.getWriter().println("Vendor Details Saved Successfully");
-		doGet(request, response);
+	        request.setAttribute("successMsg", "Vendor Details Saved Successfully");
+	        request.getRequestDispatcher("Vendor.jsp").forward(request, response);
+
+		//doGet(request, response);
 	}
 
 }

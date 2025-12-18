@@ -12,7 +12,7 @@ public class LoginDao {
 
 	    public boolean Register(LoginModel rgtr) throws SQLException, Exception {
 	    	try (Connection con=db.getcon()){
-	    		String register="INSERT INTO login values(?,?)";
+	    		String register="INSERT INTO login(UserName, Password) values(?,?)";
 	    		PreparedStatement ps=con.prepareStatement(register);
 	    		 ps.setString(1, rgtr.getUserName());
 	             ps.setString(2, rgtr.getPassword());
@@ -24,7 +24,7 @@ public class LoginDao {
 	    }
 	    public boolean Validate(LoginModel vldte) throws SQLException, Exception {
 	    	try(Connection con=db.getcon()){
-	    		String validate="select * from login";
+	    		String validate="SELECT * FROM login WHERE UserName=? AND Password=?";
 	    		PreparedStatement ps=con.prepareStatement(validate);
 	    		ps.setString(1, vldte.getUserName());
 	    		ps.setString(2, vldte.getPassword());

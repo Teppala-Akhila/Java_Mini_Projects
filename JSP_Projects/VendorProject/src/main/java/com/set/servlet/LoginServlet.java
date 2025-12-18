@@ -29,16 +29,16 @@ public class LoginServlet extends HttpServlet {
 
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String uname=request.getParameter("username");
-		String pass=request.getParameter("pswd");
+		String uname=request.getParameter("username").trim();  //"akhi " != "akhi"
+		String pass=request.getParameter("pswd").trim();
 		LoginModel um = new LoginModel(uname,pass);
 		
 		LoginDao ud=new LoginDao();
         try {
 			if (ud.Validate(um)) {
-				request.getRequestDispatcher("vendor.jsp").forward(request, response);
+				request.getRequestDispatcher("Vendor.jsp").forward(request, response);
 			} else {
-			    response.sendRedirect("error.jsp");
+			    response.sendRedirect("Error.jsp");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
