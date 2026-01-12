@@ -1,0 +1,149 @@
+@charset "UTF-8";
+
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #fff7ed, #ffedd5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #7c2d12;
+}
+
+
+.login-box {
+    width: 380px;
+    background: #ffffff;
+    padding: 36px 28px;
+    border-radius: 14px;
+    box-shadow: 0 16px 35px rgba(251,146,60,0.35);
+    border: 1px solid #fed7aa;
+}
+
+.login-box h2 {
+    text-align: center;
+    margin-bottom: 28px;
+    font-weight: 600;
+    color: #9a3412;
+}
+
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 24px;
+    row-gap: 20px;
+}
+
+
+.form-grid > div {
+    min-width: 0;
+}
+
+
+.full {
+    grid-column: 1 / -1;
+}
+
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #9a3412;
+}
+
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"] {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid #fdba74;
+    font-size: 14px;
+    background: #fff7ed;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input::placeholder {
+    color: #fb923c;
+}
+
+
+input:focus {
+    border-color: #fb923c;
+    box-shadow: 0 0 0 3px rgba(251,146,60,0.35);
+    background: #ffffff;
+}
+
+
+input[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background: linear-gradient(135deg, #fb923c, #f97316);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+input[type="submit"]:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(251,146,60,0.4);
+}
+
+
+.forgot {
+    text-align: right;
+    margin-top: -6px;
+    font-size: 13px;
+}
+
+.forgot a {
+    color: #ea580c;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.forgot a:hover {
+    text-decoration: underline;
+}
+
+
+.register {
+    text-align: center;
+    margin-top: 18px;
+    font-size: 14px;
+}
+
+.register a {
+    color: #ea580c;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.register a:hover {
+    text-decoration: underline;
+}
+
+
+@media (max-width: 600px) {
+    .login-box {
+        width: 92%;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
