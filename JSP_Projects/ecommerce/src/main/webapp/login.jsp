@@ -17,13 +17,17 @@
     <form action="LoginServlet" method="post">
 
         <div>
-            <label>Username</label>
-            <input type="text" name="username" placeholder="Enter username" required>
+            <label>Username or Email</label>
+            <input type="text" name="username"
+                   placeholder="Enter username or email"
+                   required>
         </div>
 
         <div>
             <label>Password</label>
-            <input type="password" name="pswd" placeholder="Enter password" required>
+            <input type="password" name="password"
+                   placeholder="Enter password"
+                   required>
         </div>
 
         <div class="forgot">

@@ -3,25 +3,46 @@ package com.set.model;
 import java.math.BigDecimal;
 
 public class ProductModel {
-
-    private int productId;
+    private int id;                     
+    private String sellerId;            
+    private String productCode;         
     private String productName;
     private String modelNumber;
-    private String description;
+    private String model;
     private String category;
     private String brand;
     private String color;
+    private int quantity;               
     private BigDecimal price;
-    private int stock;
-    private int warrantyMonths;
-    private String imageUrl;
-    private String status;
+    private int discount;
+    private BigDecimal finalPrice;
 
-    public int getProductId() {
-        return productId;
+    private int warrantyMonths;
+    private String imagePath;           
+    private String status;
+    private String description;
+
+    /* ===== GETTERS & SETTERS ===== */
+
+    public int getId() {
+        return id;
     }
-    public void setProductId(int productId) {
-        this.productId = productId;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getSellerId() {
+        return sellerId;
+    }
+    public void setSellerId(String sellerId) {
+        this.sellerId = sellerId;
+    }
+
+    public String getProductCode() {
+        return productCode;
+    }
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
     }
 
     public String getProductName() {
@@ -38,11 +59,11 @@ public class ProductModel {
         this.modelNumber = modelNumber;
     }
 
-    public String getDescription() {
-        return description;
+    public String getModel() {
+        return model;
     }
-    public void setDescription(String description) {
-        this.description = description;
+    public void setModel(String model) {
+        this.model = model;
     }
 
     public String getCategory() {
@@ -66,6 +87,13 @@ public class ProductModel {
         this.color = color;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     public BigDecimal getPrice() {
         return price;
     }
@@ -73,11 +101,18 @@ public class ProductModel {
         this.price = price;
     }
 
-    public int getStock() {
-        return stock;
+    public int getDiscount() {
+        return discount;
     }
-    public void setStock(int stock) {
-        this.stock = stock;
+    public void setDiscount(int discount) {
+        this.discount = discount;
+    }
+
+    public BigDecimal getFinalPrice() {
+        return finalPrice;
+    }
+    public void setFinalPrice(BigDecimal finalPrice) {
+        this.finalPrice = finalPrice;
     }
 
     public int getWarrantyMonths() {
@@ -87,11 +122,11 @@ public class ProductModel {
         this.warrantyMonths = warrantyMonths;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImagePath() {
+        return imagePath;
     }
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public String getStatus() {
@@ -99,5 +134,12 @@ public class ProductModel {
     }
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

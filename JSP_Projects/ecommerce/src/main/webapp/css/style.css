@@ -1,6 +1,8 @@
 @charset "UTF-8";
 
-
+/* =====================
+   GLOBAL BODY
+===================== */
 body {
     margin: 0;
     min-height: 100vh;
@@ -12,13 +14,15 @@ body {
     color: #7c2d12;
 }
 
-
+/* =====================
+   LOGIN / REGISTER BOX
+===================== */
 .login-box {
     width: 380px;
     background: #ffffff;
     padding: 36px 28px;
-    border-radius: 14px;
-    box-shadow: 0 16px 35px rgba(251,146,60,0.35);
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(251,146,60,0.35);
     border: 1px solid #fed7aa;
 }
 
@@ -29,7 +33,30 @@ body {
     color: #9a3412;
 }
 
+/* =====================
+   PRODUCT BOX (ADD PRODUCT)
+===================== */
+.product-box {
+    width: 420px;
+    max-height: 90vh;          /* allows scrolling */
+    overflow-y: auto;
+    background: #ffffff;
+    padding: 36px 28px;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(251,146,60,0.35);
+    border: 1px solid #fed7aa;
+}
 
+.product-box h2 {
+    text-align: center;
+    margin-bottom: 26px;
+    font-weight: 600;
+    color: #9a3412;
+}
+
+/* =====================
+   FORM GRID (REGISTER PAGE)
+===================== */
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -37,17 +64,17 @@ body {
     row-gap: 20px;
 }
 
-
 .form-grid > div {
     min-width: 0;
 }
-
 
 .full {
     grid-column: 1 / -1;
 }
 
-
+/* =====================
+   LABEL
+===================== */
 label {
     display: block;
     margin-bottom: 6px;
@@ -56,13 +83,18 @@ label {
     color: #9a3412;
 }
 
-
+/* =====================
+   INPUTS / SELECT / TEXTAREA
+===================== */
 input[type="text"],
 input[type="password"],
 input[type="email"],
-input[type="number"] {
+input[type="number"],
+select,
+textarea {
     width: 100%;
     padding: 12px 14px;
+    margin-bottom: 14px;
     border-radius: 8px;
     border: 1px solid #fdba74;
     font-size: 14px;
@@ -72,24 +104,55 @@ input[type="number"] {
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-input::placeholder {
+/* =====================
+   TEXTAREA
+===================== */
+textarea {
+    resize: none;
+    min-height: 80px;
+}
+
+/* =====================
+   FILE INPUT
+===================== */
+input[type="file"] {
+    width: 100%;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #fdba74;
+    background: #fff7ed;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* =====================
+   PLACEHOLDER
+===================== */
+input::placeholder,
+textarea::placeholder {
     color: #fb923c;
 }
 
-
-input:focus {
+/* =====================
+   FOCUS EFFECT
+===================== */
+input:focus,
+select:focus,
+textarea:focus {
     border-color: #fb923c;
     box-shadow: 0 0 0 3px rgba(251,146,60,0.35);
     background: #ffffff;
 }
 
-
+/* =====================
+   SUBMIT BUTTON
+===================== */
 input[type="submit"] {
     width: 100%;
     padding: 12px;
-    margin-top: 20px;
+    margin-top: 12px;
     background: linear-gradient(135deg, #fb923c, #f97316);
-    color: white;
+    color: #ffffff;
     border: none;
     border-radius: 8px;
     font-size: 15px;
@@ -103,7 +166,9 @@ input[type="submit"]:hover {
     box-shadow: 0 8px 20px rgba(251,146,60,0.4);
 }
 
-
+/* =====================
+   FORGOT PASSWORD
+===================== */
 .forgot {
     text-align: right;
     margin-top: -6px;
@@ -120,7 +185,9 @@ input[type="submit"]:hover {
     text-decoration: underline;
 }
 
-
+/* =====================
+   REGISTER / LOGIN LINK
+===================== */
 .register {
     text-align: center;
     margin-top: 18px;
@@ -137,9 +204,12 @@ input[type="submit"]:hover {
     text-decoration: underline;
 }
 
-
+/* =====================
+   MOBILE RESPONSIVE
+===================== */
 @media (max-width: 600px) {
-    .login-box {
+    .login-box,
+    .product-box {
         width: 92%;
     }
 

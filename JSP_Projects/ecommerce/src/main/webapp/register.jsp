@@ -16,10 +16,13 @@
 
     <form action="RegisterServlet" method="post">
 
-        
         <div class="form-grid">
 
-            
+            <div>
+                <label>Vendor Username</label>
+                <input type="text" name="username" placeholder="Enter username" required>
+            </div>
+
             <div>
                 <label>GST Number</label>
                 <input type="text" name="gst" placeholder="Enter GST number">
@@ -30,25 +33,23 @@
                 <input type="email" name="email" placeholder="Enter email" required>
             </div>
 
-            
             <div>
                 <label>Phone Number</label>
                 <input type="number" name="phone" placeholder="Enter phone number">
             </div>
 
-            <div>
-                <label>Username</label>
-                <input type="text" name="username" placeholder="Enter username" required>
-            </div>
-
-           
             <div class="full">
                 <label>Password</label>
                 <input type="password" name="password" placeholder="Enter password" required>
             </div>
 
+            <div class="full">
+                <label>Confirm Password</label>
+                <!-- ✅ FIX: name MUST be confirmPassword -->
+                <input type="password" name="confirmPassword" placeholder="Re-enter password" required>
+            </div>
+
         </div>
-       
 
         <input type="submit" value="Register">
 
