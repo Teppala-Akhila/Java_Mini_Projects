@@ -1,0 +1,94 @@
+@charset "UTF-8";
+
+body {
+    margin: 0;
+    padding: 30px;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #fff7ed;
+}
+
+/* ===== TITLE ===== */
+h2 {
+    text-align: center;
+    color: #9a3412;
+    margin-bottom: 30px;
+}
+
+/* ===== GRID ===== */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 24px;
+}
+
+/* ===== CARD ===== */
+.product-card {
+    background: #ffffff;
+    padding: 16px;
+    border-radius: 14px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+/* ===== IMAGE ===== */
+.product-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: contain;
+    margin-bottom: 12px;
+}
+
+/* ===== NAME ===== */
+.product-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1f2933;
+    margin-bottom: 8px;
+}
+
+/* ===== PRICE ROW ===== */
+.price-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+/* MRP */
+.mrp {
+    text-decoration: line-through;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+/* DISCOUNT */
+.discount {
+    color: #16a34a;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* FINAL PRICE */
+.final-price {
+    font-size: 18px;
+    font-weight: 700;
+    color: #9a3412;
+    margin-bottom: 12px;
+}
+
+/* ADD TO CART */
+.cart-btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #fb923c, #f97316);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.cart-btn:hover {
+    opacity: 0.95;
+}
