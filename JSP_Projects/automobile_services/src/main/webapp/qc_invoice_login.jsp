@@ -16,6 +16,7 @@ body {
     color: #1e293b;
 }
 
+/* HEADER */
 .header {
     height: 85px;
     background: #ffffff;
@@ -66,6 +67,7 @@ body {
     font-size: 14px;
 }
 
+/* MAIN */
 .main {
     padding: 20px;
 }
@@ -75,6 +77,7 @@ body {
     gap: 20px;
 }
 
+/* FORM */
 .form-box {
     width: 25%;
     background: #ffffff;
@@ -106,30 +109,77 @@ body {
     border: 1px solid #c7d2fe;
 }
 
+.footer-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.action-btn {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+/* IMAGE */
 .image-box {
     width: 75%;
     background: #ffffff;
     border-radius: 12px;
     box-shadow: 0 15px 30px rgba(37,99,235,0.15);
+    position: relative;
+    overflow: hidden;
+    min-height: 340px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #94a3b8;
-    font-size: 16px;
-    min-height: 340px;
 }
 
+.invoice-img {
+    max-width: 100%;
+    max-height: 100%;
+    transition: transform 0.2s ease-in-out;
+}
+
+.zoom-controls {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 50px;
+}
+
+.zoom-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #2563eb;
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+
+/* TABLE */
 .table-box {
     margin-top: 25px;
     background: #ffffff;
     padding: 15px;
     border-radius: 12px;
     box-shadow: 0 15px 30px rgba(37,99,235,0.15);
+    overflow-x: auto; /* RESPONSIVE FIX */
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
+    min-width: 900px; /* prevents column squeezing */
 }
 
 th {
@@ -151,34 +201,44 @@ td input {
     border: 1px solid #c7d2fe;
 }
 
+/* ACTION COLUMN FIX */
+td:last-child {
+    display: flex;
+    gap: 6px;
+    white-space: nowrap;
+}
+
 .row-btn {
     background: #2563eb;
     color: white;
     border: none;
-    padding: 6px 12px;
-    margin: 2px;
+    padding: 6px 10px;
     border-radius: 4px;
     cursor: pointer;
     font-size: 12px;
 }
 
-.footer-actions {
-    display: flex;
-    justify-content: flex-start;  /* move buttons to left */
-    gap: 15px;
-    margin-top: 20px;
-    padding-left: 20px;           /* slight left shift */
+/* RESPONSIVE BREAKPOINTS */
+@media (max-width: 1200px) {
+    .top-section {
+        flex-direction: column;
+    }
+
+    .form-box,
+    .image-box {
+        width: 100%;
+    }
 }
 
+@media (max-width: 768px) {
+    .row-btn {
+        padding: 5px 8px;
+        font-size: 11px;
+    }
 
-.action-btn {
-    background: #2563eb;
-    color: white;
-    border: none;
-    padding: 10px 24px;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
+    th, td {
+        font-size: 12px;
+    }
 }
 </style>
 </head>
@@ -201,23 +261,28 @@ td input {
 
     <div class="top-section">
         <div class="form-box">
-            <h3>Invoice Details</h3>
-
+            <h3>QC Invoice Details</h3>
             <div class="form-group"><label>Vendor Name</label><input></div>
             <div class="form-group"><label>Invoice Number</label><input></div>
             <div class="form-group"><label>Invoice Issue Date</label><input></div>
             <div class="form-group"><label>P.O.#</label><input></div>
             <div class="form-group"><label>Invoice Total</label><input></div>
-            
+
             <div class="footer-actions">
-        <button class="action-btn">Skip</button>
-        <button class="action-btn">Hold</button>
-        <button class="action-btn">Submit</button>
-    </div>
+                <button class="action-btn">Skip</button>
+                <button class="action-btn">Hold</button>
+                <button class="action-btn">Submit</button>
+            </div>
         </div>
 
         <div class="image-box">
-            Invoice Image will appear here
+            <img id="invoiceImage"
+                 src="<%= request.getContextPath() %>/images/sample-invoice.png"
+                 class="invoice-img">
+            <div class="zoom-controls">
+                <button class="zoom-btn" onclick="zoomIn()">+</button>
+                <button class="zoom-btn" onclick="zoomOut()">&#8722;</button>
+            </div>
         </div>
     </div>
 
@@ -252,54 +317,57 @@ td input {
 </div>
 
 <script>
+let zoomLevel = 1;
+
+function zoomIn() {
+    zoomLevel += 0.1;
+    document.getElementById("invoiceImage").style.transform = `scale(${zoomLevel})`;
+}
+
+function zoomOut() {
+    if (zoomLevel > 0.5) {
+        zoomLevel -= 0.1;
+        document.getElementById("invoiceImage").style.transform = `scale(${zoomLevel})`;
+    }
+}
+
 function addRow(button) {
     const row = button.closest("tr");
-    const table = document.getElementById("invoiceTable");
     const inputs = row.querySelectorAll("input");
 
     for (let input of inputs) {
-        if (input.value.trim() === "") {
-            alert("Please fill all fields before adding next row");
+        if (!input.value.trim()) {
+            alert("Fill all fields");
             return;
         }
     }
 
-    inputs.forEach(input => input.disabled = true);
+    inputs.forEach(i => i.disabled = true);
 
     const newRow = row.cloneNode(true);
-    const newInputs = newRow.querySelectorAll("input");
-
-    newInputs.forEach(input => {
-        input.value = "";
-        input.disabled = false;
+    newRow.querySelectorAll("input").forEach(i => {
+        i.value = "";
+        i.disabled = false;
     });
 
-    newRow.querySelector("button:nth-child(3)").innerText = "Edit";
-    table.appendChild(newRow);
-    newInputs[0].focus();
+    row.closest("table").appendChild(newRow);
 }
 
-function editRow(button) {
-    const row = button.closest("tr");
+function editRow(btn) {
+    const row = btn.closest("tr");
     const inputs = row.querySelectorAll("input");
 
-    if (button.innerText === "Edit") {
-        inputs.forEach(input => input.disabled = false);
-        button.innerText = "Save";
+    if (btn.innerText === "Edit") {
+        inputs.forEach(i => i.disabled = false);
+        btn.innerText = "Save";
     } else {
-        for (let input of inputs) {
-            if (input.value.trim() === "") {
-                alert("Fields cannot be empty");
-                return;
-            }
-        }
-        inputs.forEach(input => input.disabled = true);
-        button.innerText = "Edit";
+        inputs.forEach(i => i.disabled = true);
+        btn.innerText = "Edit";
     }
 }
 
-function deleteRow(button) {
-    button.closest("tr").remove();
+function deleteRow(btn) {
+    btn.closest("tr").remove();
 }
 </script>
 
