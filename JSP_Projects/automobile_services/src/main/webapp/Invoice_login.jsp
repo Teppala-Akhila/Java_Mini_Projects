@@ -33,8 +33,8 @@ body {
 }
 
 .logo img {
-    height: 85px;
-    max-width: 500px;
+    height: 65px;
+    max-width: 200px;
     object-fit: contain;
 }
 
@@ -185,7 +185,7 @@ td input {
 
 <div class="header">
     <div class="logo">
-        <img src="<%= request.getContextPath() %>/images/dreams-soft-logo.jpeg" alt="Dreams Soft">
+        <img src="<%= request.getContextPath() %>/images/dreams-soft-logo.jpeg">
         <strong>Dreams Soft Solutions</strong>
     </div>
 
@@ -198,7 +198,6 @@ td input {
 <div class="main">
 
     <div class="top-section">
-
         <div class="form-box">
             <h3>Invoice Details</h3>
 
@@ -239,7 +238,7 @@ td input {
     </div>
 
     <div class="table-box">
-        <table>
+        <table id="invoiceTable">
             <tr>
                 <th>Item No</th>
                 <th>Item Name</th>
@@ -258,9 +257,8 @@ td input {
                 <td><input></td>
                 <td><input></td>
                 <td>
-                    <button class="row-btn">Add</button>
-                    <button class="row-btn">Update</button>
-                    <button class="row-btn">Delete</button>
+                    <button class="row-btn" onclick="addRow(this)">Add</button>
+                    <button class="row-btn" onclick="this.closest('tr').remove()">Delete</button>
                 </td>
             </tr>
         </table>
@@ -269,10 +267,32 @@ td input {
     <div class="footer-actions">
         <button class="action-btn">Skip</button>
         <button class="action-btn">Hold</button>
-        <button class="action-btn">Update</button>
+        <button class="action-btn">Submit</button>
     </div>
 
 </div>
+
+<script>
+function addRow(button) {
+    const currentRow = button.closest("tr");
+    const table = document.getElementById("invoiceTable");
+
+    const inputs = currentRow.querySelectorAll("input");
+    for (let input of inputs) {
+        if (input.value.trim() === "") {
+            alert("Please fill all fields before adding next row");
+            return;
+        }
+    }
+
+    const newRow = currentRow.cloneNode(true);
+    const newInputs = newRow.querySelectorAll("input");
+    newInputs.forEach(input => input.value = "");
+
+    table.appendChild(newRow);
+    newInputs[0].focus();
+}
+</script>
 
 </body>
 </html>
