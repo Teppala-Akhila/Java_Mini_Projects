@@ -318,7 +318,7 @@ td:last-child {
 
 <script>
 let zoomLevel = 1;
-
+ 
 function zoomIn() {
     zoomLevel += 0.1;
     document.getElementById("invoiceImage").style.transform = `scale(${zoomLevel})`;
