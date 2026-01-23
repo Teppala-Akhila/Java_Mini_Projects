@@ -1,26 +1,17 @@
 package com.set.model;
 
 public class InvoiceModel {
-
-    /* ================= PRIMARY KEY ================= */
+	
     private int processId;
-
-    /* ================= USER INFO ================= */
     private String username;
     private String userRole;          // Verifier / QC
-
-    /* ================= IMAGE INFO ================= */
     private int imageId;
-    private String imagePath;
-
-    /* ================= INVOICE HEADER ================= */
+    private String imagePath; 
     private String vendorName;
     private String invoiceNumber;
     private String invoiceDate;       // stored as STRING
     private String poNumber;
-    private double invoiceTotal;
-
-    /* ================= ITEM DETAILS ================= */
+    private double invoiceTotal;  
     private String itemNo;
     private String itemName;
     private int quantity;
@@ -28,18 +19,12 @@ public class InvoiceModel {
     private double cgst;
     private double sgst;
     private double itemTotal;
-
-    /* ================= ACTION INFO ================= */
     private boolean imageNotClear;
     private String actionStatus;      // IN_PROGRESS / HOLD / SKIP / SUBMIT
     private String holdReason;
-
-    /* ================= TIME INFO ================= */
     private String startTime;
     private String endTime;
     private String processedDate;
-
-    /* ================= GETTERS & SETTERS ================= */
 
     public int getProcessId() {
         return processId;

@@ -293,7 +293,7 @@ td input:disabled {
          class="invoice-img">
     <div class="zoom-controls">
         <button type="button" class="zoom-btn" onclick="zoomIn()">+</button>
-        <button type="button" class="zoom-btn" onclick="zoomOut()">−</button>
+        <button type="button" class="zoom-btn" onclick="zoomOut()">&#8722;</button>
     </div>
 </div>
 
@@ -316,16 +316,26 @@ td input:disabled {
     <td><input name="itemNo"></td>
     <td><input name="itemName"></td>
     <td><input name="quantity"></td>
-    <td><input name="price"></td>
-    <td><input name="cgst"></td>
-    <td><input name="sgst"></td>
-    <td><input name="total"></td>
+    <td><input name="price" oninput="calculateRowTotal(this)"></td>
+	<td><input name="cgst" oninput="calculateRowTotal(this)"></td>
+	<td><input name="sgst" oninput="calculateRowTotal(this)"></td>
+	<td><input name="total" readonly></td>
+    
     <td class="action-cell">
         <button type="button" class="row-btn" onclick="addRow(this)">Add</button>
         <button type="button" class="row-btn" onclick="editRow(this)">Edit</button>
         <button type="button" class="row-btn" onclick="deleteRow(this)">Delete</button>
     </td>
 </tr>
+<tr id="subtotalRow">
+    <td colspan="6" style="text-align:right; font-weight:600;">Sub Total</td>
+    <td>
+        <input type="text" id="subTotal" readonly
+               style="font-weight:700; background:#e5e7eb;">
+    </td>
+    <td></td>
+</tr>
+
 </table>
 </div>
 
@@ -351,6 +361,7 @@ function addRow(btn) {
     const row = btn.closest("tr");
     const inputs = row.querySelectorAll("input");
 
+    // Validation
     for (let i of inputs) {
         if (!i.value.trim()) {
             alert("Fill all fields before adding.");
@@ -361,6 +372,7 @@ function addRow(btn) {
 
     btn.disabled = true;
 
+    // Clone row
     const newRow = row.cloneNode(true);
     newRow.querySelectorAll("input").forEach(i => {
         i.value = "";
@@ -368,7 +380,20 @@ function addRow(btn) {
     });
 
     newRow.querySelectorAll(".row-btn")[0].disabled = false;
-    invoiceTable.appendChild(newRow);
+
+    const table = document.getElementById("invoiceTable");
+    const subtotalRow = document.getElementById("subtotalRow");
+
+    // Remove subtotal row
+    subtotalRow.remove();
+
+    // Add new row
+    table.appendChild(newRow);
+
+    // Re-add subtotal row at the end
+    table.appendChild(subtotalRow);
+
+    calculateSubTotal();
 }
 
 function editRow(btn) {
@@ -390,11 +415,55 @@ function deleteRow(btn) {
     btn.closest("tr").remove();
 }
 
-/* ✅ CRITICAL FIX: ENABLE DISABLED INPUTS BEFORE SUBMIT */
 document.getElementById("invoiceForm").addEventListener("submit", function () {
     const disabledInputs = this.querySelectorAll("input:disabled");
     disabledInputs.forEach(input => input.disabled = false);
 });
+
+function calculateRowTotal(element) {
+    const row = element.closest("tr");
+
+    const price = parseFloat(row.querySelector("input[name='price']")?.value) || 0;
+    const cgst  = parseFloat(row.querySelector("input[name='cgst']")?.value) || 0;
+    const sgst  = parseFloat(row.querySelector("input[name='sgst']")?.value) || 0;
+
+    const total = price + cgst + sgst;
+
+    const totalField = row.querySelector("input[name='total']");
+    if (totalField) {
+        totalField.value = total.toFixed(2);
+    }
+}
+
+function calculateRowTotal(element) {
+    const row = element.closest("tr");
+
+    const price = parseFloat(row.querySelector("input[name='price']")?.value) || 0;
+    const cgst  = parseFloat(row.querySelector("input[name='cgst']")?.value) || 0;
+    const sgst  = parseFloat(row.querySelector("input[name='sgst']")?.value) || 0;
+
+    const total = price + cgst + sgst;
+
+    const totalField = row.querySelector("input[name='total']");
+    if (totalField) {
+        totalField.value = total.toFixed(2);
+    }
+
+    calculateSubTotal(); 
+}
+
+function calculateSubTotal() {
+    let subTotal = 0;
+
+    document.querySelectorAll("input[name='total']").forEach(input => {
+        const value = parseFloat(input.value);
+        if (!isNaN(value)) {
+            subTotal += value;
+        }
+    });
+
+    document.getElementById("subTotal").value = subTotal.toFixed(2);
+}
 </script>
 
 </body>
