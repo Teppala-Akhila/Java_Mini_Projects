@@ -455,6 +455,28 @@ function calculateSubTotal() {
     });
     document.getElementById("subTotal").value = sum.toFixed(2);
 }
+
+document.getElementById("invoiceForm").addEventListener("submit", function (e) {
+
+    const invoiceTotal = parseFloat(
+        document.querySelector("input[name='invoiceTotal']").value
+    ) || 0;
+
+    const subTotal = parseFloat(
+        document.getElementById("subTotal").value
+    ) || 0;
+
+    if (invoiceTotal !== subTotal) {
+        alert(
+            "Invoice Total and Item Sub Total must be equal.\n\n" +
+            "Invoice Total: " + invoiceTotal + "\n" +
+            "Items Total: " + subTotal
+        );
+        e.preventDefault(); // ❌ stop submit
+        return false;
+    }
+
+});
 </script>
 
 
