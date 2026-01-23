@@ -312,29 +312,35 @@ td input:disabled {
     <th>Action</th>
 </tr>
 
-<tr>
+<tr class="item-row">
     <td><input name="itemNo"></td>
     <td><input name="itemName"></td>
     <td><input name="quantity"></td>
     <td><input name="price" oninput="calculateRowTotal(this)"></td>
-	<td><input name="cgst" oninput="calculateRowTotal(this)"></td>
-	<td><input name="sgst" oninput="calculateRowTotal(this)"></td>
-	<td><input name="total" readonly></td>
-    
+    <td><input name="cgst" oninput="calculateRowTotal(this)"></td>
+    <td><input name="sgst" oninput="calculateRowTotal(this)"></td>
+    <td><input name="total" readonly></td>
     <td class="action-cell">
         <button type="button" class="row-btn" onclick="addRow(this)">Add</button>
         <button type="button" class="row-btn" onclick="editRow(this)">Edit</button>
         <button type="button" class="row-btn" onclick="deleteRow(this)">Delete</button>
     </td>
 </tr>
+
 <tr id="subtotalRow">
-    <td colspan="6" style="text-align:right; font-weight:600;">Sub Total</td>
+    <td colspan="6" style="text-align:right; font-weight:600;">
+        Sub Total
+    </td>
     <td>
-        <input type="text" id="subTotal" readonly
+        <input type="text"
+               id="subTotal"
+               name="subTotal"
+               readonly
                style="font-weight:700; background:#e5e7eb;">
     </td>
     <td></td>
 </tr>
+
 
 </table>
 </div>
@@ -345,6 +351,7 @@ td input:disabled {
 <script>
 let zoomLevel = 1;
 
+/* ===== IMAGE ZOOM ===== */
 function zoomIn() {
     zoomLevel += 0.1;
     invoiceImage.style.transform = `scale(${zoomLevel})`;
@@ -357,11 +364,11 @@ function zoomOut() {
     }
 }
 
+/* ===== ADD ROW ===== */
 function addRow(btn) {
-    const row = btn.closest("tr");
+    const row = btn.closest(".item-row");
     const inputs = row.querySelectorAll("input");
 
-    // Validation
     for (let i of inputs) {
         if (!i.value.trim()) {
             alert("Fill all fields before adding.");
@@ -372,32 +379,30 @@ function addRow(btn) {
 
     btn.disabled = true;
 
-    // Clone row
     const newRow = row.cloneNode(true);
+    newRow.className = "item-row"; // ✅ force class
+
     newRow.querySelectorAll("input").forEach(i => {
         i.value = "";
         i.disabled = false;
     });
 
-    newRow.querySelectorAll(".row-btn")[0].disabled = false;
+    // ✅ enable ALL buttons
+    newRow.querySelectorAll(".row-btn").forEach(b => b.disabled = false);
 
     const table = document.getElementById("invoiceTable");
     const subtotalRow = document.getElementById("subtotalRow");
 
-    // Remove subtotal row
     subtotalRow.remove();
-
-    // Add new row
     table.appendChild(newRow);
-
-    // Re-add subtotal row at the end
     table.appendChild(subtotalRow);
 
     calculateSubTotal();
 }
 
+/* ===== EDIT / SAVE ===== */
 function editRow(btn) {
-    const row = btn.closest("tr");
+    const row = btn.closest(".item-row");
     const inputs = row.querySelectorAll("input");
 
     if (btn.innerText === "Edit") {
@@ -408,63 +413,47 @@ function editRow(btn) {
         inputs.forEach(i => i.disabled = true);
         btn.innerText = "Edit";
         btn.style.background = "#2563eb";
+        calculateSubTotal();
     }
 }
 
+/* ===== DELETE ===== */
 function deleteRow(btn) {
-    btn.closest("tr").remove();
+    btn.closest(".item-row").remove();
+    calculateSubTotal();
 }
 
+/* ===== ENABLE ALL INPUTS BEFORE SUBMIT ===== */
 document.getElementById("invoiceForm").addEventListener("submit", function () {
-    const disabledInputs = this.querySelectorAll("input:disabled");
-    disabledInputs.forEach(input => input.disabled = false);
+    this.querySelectorAll("input:disabled").forEach(i => i.disabled = false);
 });
 
-function calculateRowTotal(element) {
-    const row = element.closest("tr");
+/* ===== ROW TOTAL ===== */
+function calculateRowTotal(el) {
+    const row = el.closest(".item-row");
 
-    const price = parseFloat(row.querySelector("input[name='price']")?.value) || 0;
-    const cgst  = parseFloat(row.querySelector("input[name='cgst']")?.value) || 0;
-    const sgst  = parseFloat(row.querySelector("input[name='sgst']")?.value) || 0;
+    const price = parseFloat(row.querySelector("input[name='price']").value) || 0;
+    const cgst  = parseFloat(row.querySelector("input[name='cgst']").value) || 0;
+    const sgst  = parseFloat(row.querySelector("input[name='sgst']").value) || 0;
 
-    const total = price + cgst + sgst;
+    row.querySelector("input[name='total']").value =
+        (price + cgst + sgst).toFixed(2);
 
-    const totalField = row.querySelector("input[name='total']");
-    if (totalField) {
-        totalField.value = total.toFixed(2);
-    }
+    calculateSubTotal();
 }
 
-function calculateRowTotal(element) {
-    const row = element.closest("tr");
-
-    const price = parseFloat(row.querySelector("input[name='price']")?.value) || 0;
-    const cgst  = parseFloat(row.querySelector("input[name='cgst']")?.value) || 0;
-    const sgst  = parseFloat(row.querySelector("input[name='sgst']")?.value) || 0;
-
-    const total = price + cgst + sgst;
-
-    const totalField = row.querySelector("input[name='total']");
-    if (totalField) {
-        totalField.value = total.toFixed(2);
-    }
-
-    calculateSubTotal(); 
-}
-
+/* ===== SUBTOTAL ===== */
 function calculateSubTotal() {
-    let subTotal = 0;
-
-    document.querySelectorAll("input[name='total']").forEach(input => {
-        const value = parseFloat(input.value);
-        if (!isNaN(value)) {
-            subTotal += value;
-        }
+    let sum = 0;
+    document.querySelectorAll("input[name='total']").forEach(t => {
+        const v = parseFloat(t.value);
+        if (!isNaN(v)) sum += v;
     });
-
-    document.getElementById("subTotal").value = subTotal.toFixed(2);
+    document.getElementById("subTotal").value = sum.toFixed(2);
 }
 </script>
+
+
 
 </body>
 </html>

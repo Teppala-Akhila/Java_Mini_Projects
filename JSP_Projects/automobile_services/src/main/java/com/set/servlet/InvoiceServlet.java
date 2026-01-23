@@ -28,10 +28,7 @@ public class InvoiceServlet extends HttpServlet {
 
         String username = (String) session.getAttribute("username");
         String role = (String) session.getAttribute("role");
-
-        if (role == null) {
-            role = "Verifier"; // SAFE DEFAULT
-        }
+        if (role == null) role = "Verifier";
 
         /* ================= HEADER FIELDS ================= */
         String vendorName = request.getParameter("vendorName");
@@ -39,10 +36,18 @@ public class InvoiceServlet extends HttpServlet {
         String invoiceDate = request.getParameter("invoiceDate");
         String poNumber = request.getParameter("poNumber");
 
+        /* 🔹 Manual invoice total (entered by BPO) */
         double invoiceTotal = 0.0;
         String invoiceTotalStr = request.getParameter("invoiceTotal");
         if (invoiceTotalStr != null && !invoiceTotalStr.trim().isEmpty()) {
             invoiceTotal = Double.parseDouble(invoiceTotalStr);
+        }
+
+        /* 🔹 Auto-calculated subtotal (bottom table) */
+        double subTotal = 0.0;
+        String subTotalStr = request.getParameter("subTotal");
+        if (subTotalStr != null && !subTotalStr.trim().isEmpty()) {
+            subTotal = Double.parseDouble(subTotalStr);
         }
 
         boolean imageNotClear = request.getParameter("imageNotClear") != null;
@@ -70,49 +75,68 @@ public class InvoiceServlet extends HttpServlet {
         InvoiceDao dao = new InvoiceDao();
         int savedCount = 0;
 
+        /* ================= SAVE ONE ROW PER ITEM ================= */
         for (int i = 0; i < itemNos.length; i++) {
 
             if (itemNos[i] == null || itemNos[i].trim().isEmpty()) {
                 continue;
             }
 
+            /* ===== SAFE PARSING ===== */
+            int quantity = (qtys != null && qtys[i] != null && !qtys[i].trim().isEmpty())
+                    ? Integer.parseInt(qtys[i]) : 0;
+
+            double price = (prices != null && prices[i] != null && !prices[i].trim().isEmpty())
+                    ? Double.parseDouble(prices[i]) : 0.0;
+
+            double cgst = (cgsts != null && cgsts[i] != null && !cgsts[i].trim().isEmpty())
+                    ? Double.parseDouble(cgsts[i]) : 0.0;
+
+            double sgst = (sgsts != null && sgsts[i] != null && !sgsts[i].trim().isEmpty())
+                    ? Double.parseDouble(sgsts[i]) : 0.0;
+
+            double itemTotal = (totals != null && totals[i] != null && !totals[i].trim().isEmpty())
+                    ? Double.parseDouble(totals[i]) : 0.0;
+
             InvoiceModel model = new InvoiceModel();
 
+            /* USER */
             model.setUsername(username);
             model.setUserRole(role);
 
+            /* IMAGE */
             model.setImageId(1);
             model.setImagePath("images/sample-invoice.png");
 
+            /* INVOICE HEADER */
             model.setVendorName(vendorName);
             model.setInvoiceNumber(invoiceNumber);
             model.setInvoiceDate(invoiceDate);
             model.setPoNumber(poNumber);
-            model.setInvoiceTotal(invoiceTotal);
+            model.setInvoiceTotal(invoiceTotal); // 🔹 manual
+            model.setSubTotal(subTotal);         // 🔹 auto
 
+            /* ITEM */
             model.setItemNo(itemNos[i]);
             model.setItemName(itemNames[i]);
-            model.setQuantity(Integer.parseInt(qtys[i]));
-            model.setPrice(Double.parseDouble(prices[i]));
-            model.setCgst(Double.parseDouble(cgsts[i]));
-            model.setSgst(Double.parseDouble(sgsts[i]));
-            model.setItemTotal(Double.parseDouble(totals[i]));
+            model.setQuantity(quantity);
+            model.setPrice(price);
+            model.setCgst(cgst);
+            model.setSgst(sgst);
+            model.setItemTotal(itemTotal);
 
+            /* STATUS */
             model.setImageNotClear(imageNotClear);
             model.setActionStatus(actionStatus);
             model.setHoldReason(null);
 
+            /* TIME */
             model.setStartTime(startTime);
             model.setEndTime(endTime);
             model.setProcessedDate(processedDate);
 
-            try {
-                dao.saveInvoiceProcessing(model);
+            if (dao.saveInvoiceProcessing(model)) {
                 savedCount++;
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.getWriter().write("DB Error while saving data");
-                return;
             }
         }
 

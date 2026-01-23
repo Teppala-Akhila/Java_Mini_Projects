@@ -19,6 +19,7 @@ public class InvoiceModel {
     private double cgst;
     private double sgst;
     private double itemTotal;
+    private double subTotal;
     private boolean imageNotClear;
     private String actionStatus;      // IN_PROGRESS / HOLD / SKIP / SUBMIT
     private String holdReason;
@@ -161,6 +162,15 @@ public class InvoiceModel {
     public void setItemTotal(double itemTotal) {
         this.itemTotal = itemTotal;
     }
+    
+    public double getSubTotal() {
+        return subTotal;
+    }
+
+    public void setSubTotal(double subTotal) {
+        this.subTotal = subTotal;
+    }
+
 
     public boolean isImageNotClear() {
         return imageNotClear;

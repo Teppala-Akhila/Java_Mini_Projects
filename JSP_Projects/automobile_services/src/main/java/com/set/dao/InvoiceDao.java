@@ -2,21 +2,20 @@ package com.set.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-
 import com.set.model.InvoiceModel;
 
 public class InvoiceDao {
 
     public boolean saveInvoiceProcessing(InvoiceModel invoice) {
 
-    	String sql =
-    		    "INSERT INTO user_invoice_processing (" +
-    		    "username, user_role, image_id, image_path, " +
-    		    "vendor_name, invoice_number, invoice_date, po_number, invoice_total, " +
-    		    "item_no, item_name, quantity, price, cgst, sgst, item_total, " +
-    		    "image_not_clear, action_status, hold_reason, " +
-    		    "start_time, end_time, processed_date" +
-    		    ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql =
+            "INSERT INTO user_invoice_processing (" +
+            "username, user_role, image_id, image_path, " +
+            "vendor_name, invoice_number, invoice_date, po_number, invoice_total, " +
+            "item_no, item_name, quantity, price, cgst, sgst, item_total, " +
+            "image_not_clear, action_status, hold_reason, " +
+            "start_time, end_time, processed_date, sub_total" +
+            ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try (Connection con = DbConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -30,7 +29,7 @@ public class InvoiceDao {
             ps.setString(6, invoice.getInvoiceNumber());
             ps.setString(7, invoice.getInvoiceDate());
             ps.setString(8, invoice.getPoNumber());
-            ps.setDouble(9, invoice.getInvoiceTotal());
+            ps.setDouble(9, invoice.getInvoiceTotal());   // manual total
 
             ps.setString(10, invoice.getItemNo());
             ps.setString(11, invoice.getItemName());
@@ -38,7 +37,7 @@ public class InvoiceDao {
             ps.setDouble(13, invoice.getPrice());
             ps.setDouble(14, invoice.getCgst());
             ps.setDouble(15, invoice.getSgst());
-            ps.setDouble(16, invoice.getItemTotal());
+            ps.setDouble(16, invoice.getItemTotal());     // row total
 
             ps.setBoolean(17, invoice.isImageNotClear());
             ps.setString(18, invoice.getActionStatus());
@@ -48,7 +47,9 @@ public class InvoiceDao {
             ps.setString(21, invoice.getEndTime());
             ps.setString(22, invoice.getProcessedDate());
 
-            return ps.executeUpdate() > 0; // ✅ SUCCESS FLAG
+            ps.setDouble(23, invoice.getSubTotal());      // ✅ subtotal
+
+            return ps.executeUpdate() > 0;
 
         } catch (Exception e) {
             e.printStackTrace();
