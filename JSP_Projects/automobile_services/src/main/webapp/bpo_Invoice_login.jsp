@@ -304,19 +304,19 @@ td input:disabled {
 <tr>
     <th>Item No</th>
     <th>Item Name</th>
-    <th>Quantity</th>
-    <th>Price</th>
-    <th>CGST</th>
-    <th>SGST</th>
-    <th>Total</th>
-    <th>Action</th>
+	<th>Price</th>
+	<th>Quantity</th>
+	<th>CGST</th>
+	<th>SGST</th>
+	<th>Total</th>
+	<th>Action</th>
 </tr>
 
 <tr class="item-row">
     <td><input name="itemNo"></td>
     <td><input name="itemName"></td>
-    <td><input name="quantity"></td>
     <td><input name="price" oninput="calculateRowTotal(this)"></td>
+    <td><input name="quantity" oninput="calculateRowTotal(this)"></td>
     <td><input name="cgst" oninput="calculateRowTotal(this)"></td>
     <td><input name="sgst" oninput="calculateRowTotal(this)"></td>
     <td><input name="total" readonly></td>
@@ -432,15 +432,19 @@ document.getElementById("invoiceForm").addEventListener("submit", function () {
 function calculateRowTotal(el) {
     const row = el.closest(".item-row");
 
-    const price = parseFloat(row.querySelector("input[name='price']").value) || 0;
-    const cgst  = parseFloat(row.querySelector("input[name='cgst']").value) || 0;
-    const sgst  = parseFloat(row.querySelector("input[name='sgst']").value) || 0;
+    const price    = parseFloat(row.querySelector("input[name='price']").value) || 0;
+    const quantity = parseFloat(row.querySelector("input[name='quantity']").value) || 0;
+    const cgst     = parseFloat(row.querySelector("input[name='cgst']").value) || 0;
+    const sgst     = parseFloat(row.querySelector("input[name='sgst']").value) || 0;
 
-    row.querySelector("input[name='total']").value =
-        (price + cgst + sgst).toFixed(2);
+    const baseAmount = price * quantity;
+    const total = baseAmount + cgst + sgst;
+
+    row.querySelector("input[name='total']").value = total.toFixed(2);
 
     calculateSubTotal();
 }
+
 
 /* ===== SUBTOTAL ===== */
 function calculateSubTotal() {
