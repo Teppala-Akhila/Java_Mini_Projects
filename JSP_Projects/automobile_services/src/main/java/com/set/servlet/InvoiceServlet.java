@@ -2,22 +2,24 @@ package com.set.servlet;
 
 import com.set.dao.InvoiceDao;
 import com.set.model.InvoiceModel;
-import com.set.model.InvoiceItemModel;
 
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @WebServlet("/InvoiceServlet")
 public class InvoiceServlet extends HttpServlet {
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
-        /* ===== SESSION CHECK ===== */
+        response.setContentType("text/plain");
+
+        /* ================= SESSION CHECK ================= */
         HttpSession session = request.getSession(false);
         if (session == null) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Session expired");
@@ -25,77 +27,97 @@ public class InvoiceServlet extends HttpServlet {
         }
 
         String username = (String) session.getAttribute("username");
+        String role = (String) session.getAttribute("role");
 
-        /* ===== READ INVOICE DATA ===== */
-        InvoiceModel invoice = new InvoiceModel();
-        invoice.setUsername(username);
-        invoice.setVendorName(request.getParameter("vendorName"));
-        invoice.setInvoiceNumber(request.getParameter("invoiceNumber"));
-        invoice.setInvoiceDate(request.getParameter("invoiceDate")); // STRING
-        invoice.setPoNumber(request.getParameter("poNumber"));
+        if (role == null) {
+            role = "Verifier"; // SAFE DEFAULT
+        }
 
-        String invoiceTotalStr = request.getParameter("invoiceTotal");
+        /* ================= HEADER FIELDS ================= */
+        String vendorName = request.getParameter("vendorName");
+        String invoiceNumber = request.getParameter("invoiceNumber");
+        String invoiceDate = request.getParameter("invoiceDate");
+        String poNumber = request.getParameter("poNumber");
+
         double invoiceTotal = 0.0;
+        String invoiceTotalStr = request.getParameter("invoiceTotal");
         if (invoiceTotalStr != null && !invoiceTotalStr.trim().isEmpty()) {
             invoiceTotal = Double.parseDouble(invoiceTotalStr);
         }
-        invoice.setInvoiceTotal(invoiceTotal);
 
-        invoice.setImageNotClear(request.getParameter("imageNotClear") != null);
-        invoice.setActionStatus(request.getParameter("actionStatus"));
+        boolean imageNotClear = request.getParameter("imageNotClear") != null;
+        String actionStatus = request.getParameter("actionStatus");
 
-        /* ===== READ ITEM TABLE ===== */
+        /* ================= TIME ================= */
+        String startTime = LocalTime.now().toString();
+        String endTime = LocalTime.now().toString();
+        String processedDate = LocalDate.now().toString();
+
+        /* ================= TABLE ARRAYS ================= */
         String[] itemNos = request.getParameterValues("itemNo");
         String[] itemNames = request.getParameterValues("itemName");
+        String[] qtys = request.getParameterValues("quantity");
         String[] prices = request.getParameterValues("price");
         String[] cgsts = request.getParameterValues("cgst");
         String[] sgsts = request.getParameterValues("sgst");
         String[] totals = request.getParameterValues("total");
 
-        List<InvoiceItemModel> items = new ArrayList<>();
+        if (itemNos == null) {
+            response.getWriter().write("No items received from UI");
+            return;
+        }
 
-        if (itemNos != null) {
-            for (int i = 0; i < itemNos.length; i++) {
+        InvoiceDao dao = new InvoiceDao();
+        int savedCount = 0;
 
-                // Skip empty rows
-                if ((itemNos[i] == null || itemNos[i].trim().isEmpty()) &&
-                    (itemNames[i] == null || itemNames[i].trim().isEmpty()) &&
-                    (prices[i] == null || prices[i].trim().isEmpty())) {
-                    continue;
-                }
+        for (int i = 0; i < itemNos.length; i++) {
 
-                InvoiceItemModel item = new InvoiceItemModel();
-                item.setItemNo(itemNos[i]);
-                item.setItemName(itemNames[i]);
+            if (itemNos[i] == null || itemNos[i].trim().isEmpty()) {
+                continue;
+            }
 
-                item.setPrice(prices[i] != null && !prices[i].trim().isEmpty()
-                        ? Double.parseDouble(prices[i]) : 0.0);
+            InvoiceModel model = new InvoiceModel();
 
-                item.setCgst(cgsts[i] != null && !cgsts[i].trim().isEmpty()
-                        ? Double.parseDouble(cgsts[i]) : 0.0);
+            model.setUsername(username);
+            model.setUserRole(role);
 
-                item.setSgst(sgsts[i] != null && !sgsts[i].trim().isEmpty()
-                        ? Double.parseDouble(sgsts[i]) : 0.0);
+            model.setImageId(1);
+            model.setImagePath("images/sample-invoice.png");
 
-                item.setTotal(totals[i] != null && !totals[i].trim().isEmpty()
-                        ? Double.parseDouble(totals[i]) : 0.0);
+            model.setVendorName(vendorName);
+            model.setInvoiceNumber(invoiceNumber);
+            model.setInvoiceDate(invoiceDate);
+            model.setPoNumber(poNumber);
+            model.setInvoiceTotal(invoiceTotal);
 
-                items.add(item);
+            model.setItemNo(itemNos[i]);
+            model.setItemName(itemNames[i]);
+            model.setQuantity(Integer.parseInt(qtys[i]));
+            model.setPrice(Double.parseDouble(prices[i]));
+            model.setCgst(Double.parseDouble(cgsts[i]));
+            model.setSgst(Double.parseDouble(sgsts[i]));
+            model.setItemTotal(Double.parseDouble(totals[i]));
+
+            model.setImageNotClear(imageNotClear);
+            model.setActionStatus(actionStatus);
+            model.setHoldReason(null);
+
+            model.setStartTime(startTime);
+            model.setEndTime(endTime);
+            model.setProcessedDate(processedDate);
+
+            try {
+                dao.saveInvoiceProcessing(model);
+                savedCount++;
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.getWriter().write("DB Error while saving data");
+                return;
             }
         }
 
-        invoice.setItems(items);
-
-        /* ===== DAO CALL ===== */
-        InvoiceDao dao = new InvoiceDao();
-
-        try {
-            dao.saveInvoiceWithItems(invoice);
-            response.getWriter().write(
-                    "Invoice " + invoice.getActionStatus() + " saved successfully");
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.getWriter().write("Error saving invoice");
-        }
+        response.getWriter().write(
+            "SUCCESS: " + savedCount + " item(s) saved with status " + actionStatus
+        );
     }
 }
