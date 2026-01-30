@@ -9,12 +9,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 import com.db.Dbconnection;
+import com.dao.QcInvoiceWorkflow;
 
 @WebServlet("/QCServlet")
 public class QCServlet extends HttpServlet {
 
     /* ===============================
-       GET → block browser access
+       BLOCK GET REQUESTS
        =============================== */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -22,24 +23,24 @@ public class QCServlet extends HttpServlet {
 
         response.setContentType("text/plain");
         response.getWriter().write(
-            "QCServlet is POST-only. Use this via QC actions (Approve / Reject)."
+            "QCServlet is POST-only. Use QC buttons."
         );
     }
 
     /* ===============================
-       POST → QC actions
+       HANDLE QC ACTIONS
        =============================== */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        response.setContentType("text/plain");
-
         HttpSession session = request.getSession(false);
-        String qcUser = (session != null) ? (String) session.getAttribute("username") : null;
+        String qcUser = (session != null)
+                ? (String) session.getAttribute("username")
+                : null;
 
         if (qcUser == null) {
-            response.getWriter().write("QC user not logged in");
+            response.sendRedirect("login.jsp");
             return;
         }
 
@@ -48,91 +49,110 @@ public class QCServlet extends HttpServlet {
         String comments = request.getParameter("comments");
 
         if (action == null || imageIdStr == null) {
-            response.getWriter().write("Invalid request");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request");
             return;
         }
 
         int imageId = Integer.parseInt(imageIdStr);
 
-        try (Connection conn = Dbconnection.getConnection()) {
+        try {
 
-            switch (action) {
+            /* =================================================
+               SUBMIT → QC APPROVE + LOAD NEXT INVOICE
+               ================================================= */
+            if ("submit".equals(action)) {
 
-                /* ================= APPROVE ================= */
-                case "approve": {
-                    String sql =
-                        "UPDATE invoice_images SET " +
-                        " qc_checked_by = ?, " +
-                        " qc_data = ?, " +
-                        " qc_end_time = NOW(), " +
-                        " status = 'qc_approved', " +
-                        " assigned_to_qc = NULL " +
-                        " WHERE image_id = ?";
+                QcInvoiceWorkflow workflow = new QcInvoiceWorkflow();
+                workflow.markQcApproved(imageId, qcUser);
 
-                    try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                        ps.setString(1, qcUser);
-                        ps.setString(2, "Approved: " + (comments != null ? comments : "No comments"));
-                        ps.setInt(3, imageId);
-                        ps.executeUpdate();
-                    }
-
-                    response.getWriter().write("success");
-                    break;
-                }
-
-                /* ================= REJECT ================= */
-                case "reject": {
-                    String sql =
-                        "UPDATE invoice_images SET " +
-                        " qc_checked_by = ?, " +
-                        " qc_data = ?, " +
-                        " qc_end_time = NOW(), " +
-                        " status = 'qc_rejected', " +
-                        " assigned_to_qc = NULL " +
-                        " WHERE image_id = ?";
-
-                    try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                        ps.setString(1, qcUser);
-                        ps.setString(2, "Rejected: " + (comments != null ? comments : "No reason"));
-                        ps.setInt(3, imageId);
-                        ps.executeUpdate();
-                    }
-
-                    response.getWriter().write("success");
-                    break;
-                }
-
-                /* ============ NEEDS CORRECTION ============ */
-                case "correction": {
-                    String sql =
-                        "UPDATE invoice_images SET " +
-                        " qc_checked_by = ?, " +
-                        " qc_data = ?, " +
-                        " qc_end_time = NOW(), " +
-                        " status = 'needs_correction', " +
-                        " assigned_to_qc = NULL, " +
-                        " errors = CONCAT(IFNULL(errors,''), ' | QC: ', ?) " +
-                        " WHERE image_id = ?";
-
-                    try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                        ps.setString(1, qcUser);
-                        ps.setString(2, "Correction requested");
-                        ps.setString(3, comments != null ? comments : "No comments");
-                        ps.setInt(4, imageId);
-                        ps.executeUpdate();
-                    }
-
-                    response.getWriter().write("success");
-                    break;
-                }
-
-                default:
-                    response.getWriter().write("Invalid action");
+                // redirect to loader servlet
+                response.sendRedirect(request.getContextPath() + "/qc");
+                return;
             }
+
+            /* =================================================
+               OTHER QC ACTIONS
+               ================================================= */
+            try (Connection conn = Dbconnection.getConnection()) {
+
+                /* ---------- APPROVE ---------- */
+                if ("approve".equals(action)) {
+
+                    String sql =
+                        "UPDATE invoice_images SET " +
+                        "status = 'qc_approved', " +
+                        "qc_checked_by = ?, " +
+                        "qc_end_time = NOW(), " +
+                        "assigned_to_qc = NULL " +
+                        "WHERE image_id = ?";
+
+                    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                        ps.setString(1, qcUser);
+                        ps.setInt(2, imageId);
+                        ps.executeUpdate();
+                    }
+                }
+
+                /* ---------- REJECT ---------- */
+                else if ("reject".equals(action)) {
+
+                    String sql =
+                        "UPDATE invoice_images SET " +
+                        "status = 'qc_rejected', " +
+                        "qc_checked_by = ?, " +
+                        "errors = ?, " +
+                        "qc_end_time = NOW(), " +
+                        "assigned_to_qc = NULL " +
+                        "WHERE image_id = ?";
+
+                    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                        ps.setString(1, qcUser);
+                        ps.setString(2,
+                            comments != null ? comments : "Rejected by QC");
+                        ps.setInt(3, imageId);
+                        ps.executeUpdate();
+                    }
+                }
+
+                /* ---------- NEEDS CORRECTION ---------- */
+                else if ("correction".equals(action)) {
+
+                    String sql =
+                        "UPDATE invoice_images SET " +
+                        "status = 'needs_correction', " +
+                        "qc_checked_by = ?, " +
+                        "errors = CONCAT(IFNULL(errors,''), ' | QC: ', ?), " +
+                        "qc_end_time = NOW(), " +
+                        "assigned_to_qc = NULL " +
+                        "WHERE image_id = ?";
+
+                    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                        ps.setString(1, qcUser);
+                        ps.setString(2,
+                            comments != null ? comments : "Correction required");
+                        ps.setInt(3, imageId);
+                        ps.executeUpdate();
+                    }
+                }
+
+                else {
+                    response.sendError(
+                        HttpServletResponse.SC_BAD_REQUEST,
+                        "Invalid QC action"
+                    );
+                    return;
+                }
+            }
+
+            // after any action → load next invoice
+            response.sendRedirect(request.getContextPath() + "/qc");
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.getWriter().write("Error: " + e.getMessage());
+            response.sendError(
+                HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                "QC processing failed"
+            );
         }
     }
 }

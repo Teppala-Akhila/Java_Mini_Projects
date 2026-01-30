@@ -90,6 +90,7 @@ String[] total = inv.getItemTotal().split(",");
 <div class="form-box">
 <h3>QC Invoice Details</h3>
 
+
 <div class="form-group"><label>Vendor Name</label><input class="freeze-field"></div>
 <div class="form-group"><label>Invoice Number</label><input class="freeze-field"></div>
 <div class="form-group"><label>Invoice Issue Date</label><input class="freeze-field"></div>
@@ -109,12 +110,37 @@ Please select "Image is not clear" before skipping.
 <button class="action-btn" type="button" onclick="edit(this)">Edit</button>
 <button class="action-btn" type="button">Next</button>
 <button class="action-btn" type="button" onclick="handleSkipClick()">Skip</button>
-<button class="action-btn" type="button">Submit</button>
+<form method="post"
+          action="<%=request.getContextPath()%>/QCServlet"
+          style="flex:1;">
+
+        <input type="hidden" name="imageId" value="<%= img.getImageId() %>">
+        <input type="hidden" name="action" value="submit">
+
+        <button class="action-btn" type="submit">
+            Submit
+        </button>
+    </form>
 </div>
 
 </div>
 
 <div class="image-box">
+<div style="
+    position:absolute;
+    top:16px;
+    left:20px;
+    background:#2563eb;
+    color:white;
+    padding:6px 14px;
+    border-radius:999px;
+    font-size:14px;
+    font-weight:600;
+    z-index:20;
+    box-shadow:0 4px 10px rgba(0,0,0,0.2);
+">
+    Invoice ID : <%= img.getImageId() %>
+</div>
 <img id="invoiceImage"
 src="<%=request.getContextPath()%>/invoice_images/<%=img.getImagePath()%>"
 class="invoice-img">
