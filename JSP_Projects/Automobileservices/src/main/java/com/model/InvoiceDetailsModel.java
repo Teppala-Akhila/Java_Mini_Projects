@@ -24,7 +24,6 @@ public class InvoiceDetailsModel {
     private String verifiedBy;
     private Timestamp verifiedTime;
 
-    // ===== getters & setters =====
     public int getImageId() { return imageId; }
     public void setImageId(int imageId) { this.imageId = imageId; }
 

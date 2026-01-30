@@ -33,7 +33,6 @@ public class Homeloginservlet extends HttpServlet {
 
             response.sendRedirect("home.jsp");
         } else {
-            // ❗ redirect back to login
             response.sendRedirect("login.jsp?error=1");
         }
     }

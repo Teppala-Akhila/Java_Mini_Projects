@@ -21,32 +21,41 @@ public class Logoutservlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
+        String username = null;
 
         if (session != null) {
-            String username = (String) session.getAttribute("username");
+            username = (String) session.getAttribute("username");
+        }
+
+        try (Connection conn = new Dbconnection().getConnection()) {
 
             if (username != null) {
-                try (Connection conn = new Dbconnection().getConnection()) {
-                    // Reset all images assigned to this user back to pending
-                    // This handles cases where user logs out while holding an image or just has one open
-                    String sql =
-                        "UPDATE invoice_images SET " +
-                        " assigned_to_user = NULL, " +
-                        " status = 'pending', " +
-                        " verify_start_time = NULL " +
-                        " WHERE assigned_to_user = ? " +
-                        " AND status IN ('in_progress', 'hold')";
 
-                    try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                        ps.setString(1, username);
-                        ps.executeUpdate();
-                    }
+                // VERIFY release
+                String verifySql =
+                    "UPDATE invoice_images SET assigned_to_user=NULL, status='pending', verify_start_time=NULL " +
+                    "WHERE assigned_to_user=? AND status IN ('in_progress','hold')";
 
-                } catch (Exception e) {
-                    e.printStackTrace();
+                try (PreparedStatement ps = conn.prepareStatement(verifySql)) {
+                    ps.setString(1, username);
+                    ps.executeUpdate();
+                }
+
+                // QC release
+                String qcSql =
+                    "UPDATE invoice_images SET assigned_to_qc=NULL WHERE assigned_to_qc=?";
+
+                try (PreparedStatement ps = conn.prepareStatement(qcSql)) {
+                    ps.setString(1, username);
+                    ps.executeUpdate();
                 }
             }
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (session != null) {
             session.invalidate();
         }
 

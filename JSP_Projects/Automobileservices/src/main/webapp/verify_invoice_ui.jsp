@@ -240,7 +240,15 @@ td input:disabled {
         font-size: 12px;
     }
 }
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 
+input[type=number] {
+    -moz-appearance: textfield;
+}
 .success-msg {
     background: #d4edda;
     color: #155724;
@@ -398,7 +406,7 @@ td input:disabled {
                 </div>
                 
                 <div class="form-group">
-                    <label>Invoice Total (â¹)</label>
+                    <label>Invoice Total (&#8377;)</label>
                     <input type="number" name="invoiceTotal" id="invoiceTotal" step="0.01" onchange="calculateSubTotal();">
                 </div>
                  <div style="margin-top:10px;">
@@ -409,7 +417,7 @@ td input:disabled {
              
                 
                 <div class="footer-actions">
-                     <button class="action-btn" type="button" id="skipBtn" disabled onclick="skipInvoice()">Skip</button>
+                     <button class="action-btn" type="button" id="skipBtn" onclick="skipInvoice()">Skip</button>
 					<button type="button" class="action-btn" id="holdBtn" onclick="toggleHold()">Hold</button>
                    <button type="submit" name="actionStatus" value="submit" class="action-btn">Submit</button>
 
@@ -440,11 +448,11 @@ td input:disabled {
                     <tr>
                         <th>Item No</th>
                         <th>Item Name</th>
-                        <th>Price (â¹)</th>
+                        <th>Price (&#8377;)</th>
                         <th>Quantity</th>
                         <th>CGST (%)</th>
                         <th>SGST (%)</th>
-                        <th>Total (â¹)</th>
+                        <th>Total (&#8377;)</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -452,10 +460,10 @@ td input:disabled {
                     <tr class="item-row">	
                         <td><input type="text" name="itemNo[]" class="itemNo" placeholder="001"></td>
                         <td><input type="text" name="itemName[]" class="itemName" placeholder="Item description"></td>
-                        <td><input type="number" name="itemPrice[]" class="itemPrice" step="0.01" placeholder="0.00" onchange="calculateRowTotal(this)"></td>
+                        <td><input type="number" name="itemPrice[]" class="itemPrice" step="0.01" placeholder="0.00" oninput="calculateRowTotal(this)"></td>
                         <td><input type="number"name="quantity[]" class="quantity" step="001" placeholder="0" oninput="calculateRowTotal(this)"></td>
-                        <td><input type="number" name="itemCGST[]" class="itemCGST" step="0.01" placeholder="9" onchange="calculateRowTotal(this)"></td>
-                        <td><input type="number" name="itemSGST[]" class="itemSGST" step="0.01" placeholder="9" onchange="calculateRowTotal(this)"></td>
+                        <td><input type="number" name="itemCGST[]" class="itemCGST" step="0.01" placeholder="9" oninput="calculateRowTotal(this)"></td>
+                        <td><input type="number" name="itemSGST[]" class="itemSGST" step="0.01" placeholder="9" oninput="calculateRowTotal(this)"></td>
                         <td><input type="number" name="itemTotal[]" class="itemTotal" step="0.01" placeholder="0.00" readonly></td>
                         <td class="action-cell">
         <button type="button" class="row-btn" onclick="addRow(this)">Add</button>
@@ -465,7 +473,7 @@ td input:disabled {
                     </tr>
                     <tr id="subtotalRow">
   						  <td colspan="6" style="text-align:right; font-weight:600;">
-  						      Sub Total
+  						      Sub Total(&#8377;)
   						  </td>
  				   <td>
    			     <input type="text"

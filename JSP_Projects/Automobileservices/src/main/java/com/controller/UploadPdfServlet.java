@@ -41,28 +41,24 @@ public class UploadPdfServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            // 1. Get uploaded PDF
+
             Part pdfPart = request.getPart("pdfFile");
             String originalFileName = pdfPart.getSubmittedFileName();
-            
-            // Validate file type
+
             if (originalFileName == null || !originalFileName.toLowerCase().endsWith(".pdf")) {
                 out.println("<h3 style='color:red;'>Error: Only PDF files are allowed!</h3>");
                 out.println("<a href='image.jsp'>Go Back</a>");
                 return;
             }
 
-            // 2. Create directories inside webapp
             String webappPath = getServletContext().getRealPath("/");
-            
-            // PDF temp directory
+
             String pdfDir = webappPath + "temp_pdfs/";
             File pdfDirFile = new File(pdfDir);
             if (!pdfDirFile.exists()) {
                 pdfDirFile.mkdirs();
             }
-            
-            // Images directory - INSIDE WEBAPP for easy access
+
             String imageDir = webappPath + "invoice_images/";
             File imageDirFile = new File(imageDir);
             if (!imageDirFile.exists()) {
@@ -77,7 +73,6 @@ public class UploadPdfServlet extends HttpServlet {
             out.println("<p><strong>WebApp Path:</strong> " + webappPath + "</p>");
             out.println("<p><strong>Images will be saved to:</strong> " + imageDir + "</p>");
 
-            // 3. Save PDF temporarily with unique timestamp
             long timestamp = System.currentTimeMillis();
             String pdfPath = pdfDir + timestamp + "_" + originalFileName.replace(" ", "_");
             pdfPart.write(pdfPath);
@@ -93,26 +88,23 @@ public class UploadPdfServlet extends HttpServlet {
                 out.println("<p><strong>Total Pages:</strong> " + totalPages + "</p>");
                 out.println("<hr style='margin: 20px 0;'>");
 
-                // 4. Convert each page to image
+ 
                 for (int page = 0; page < totalPages; page++) {
                     out.println("<div style='background: #f8f9fc; padding: 10px; margin: 10px 0; border-radius: 5px;'>");
                     out.println("<p>📄 <strong>Processing Page " + (page + 1) + ":</strong></p>");
                     
                     try {
-                        // Render image at 150 DPI (good quality)
+                       
                         BufferedImage image = renderer.renderImageWithDPI(page, 150);
-                        
-                        // Create image name
+                       
                         String imageName = "invoice_" + timestamp + "_page_" + (page + 1) + ".jpg";
                         String imagePath = imageDir + imageName;
                         
-                        // Save image as JPG
                         boolean savedToDisk = ImageIO.write(image, "jpg", new File(imagePath));
                         
                         if (savedToDisk) {
                             out.println("<p style='color:green; margin-left: 20px;'>✓ Image saved: " + imageName + "</p>");
                             
-                            // Save to database with workflow status
                             InvoiceImageModel model = new InvoiceImageModel();
                             model.setImagePath(imageName);
                             model.setStatus("pending");
@@ -138,7 +130,6 @@ public class UploadPdfServlet extends HttpServlet {
                 out.println("<h3 style='color:blue;'>✅ Processing Complete!</h3>");
                 out.println("<p><strong>Successfully processed:</strong> " + totalImages + " out of " + totalPages + " pages</p>");
                 
-                // 5. Clean up temp PDF
                 try {
                     new File(pdfPath).delete();
                     out.println("<p style='color:gray;'>✓ Temporary PDF removed</p>");
@@ -146,13 +137,11 @@ public class UploadPdfServlet extends HttpServlet {
                     out.println("<p style='color:orange;'>⚠ Could not delete temp file</p>");
                 }
                 
-                // 6. Show database status
                 out.println("<div style='margin-top: 20px; padding: 15px; background: #e6f2ff; border-radius: 5px;'>");
                 out.println("<h4>📊 Database Status:</h4>");
                 showDatabaseStatus(out);
                 out.println("</div>");
-                
-                // 7. Show how to access images
+             
                 out.println("<div style='margin-top: 20px; padding: 15px; background: #e6ffe6; border-radius: 5px;'>");
                 out.println("<h4>🔗 How to Access Images:</h4>");
                 out.println("<p>Images are now accessible via:</p>");
@@ -172,8 +161,7 @@ public class UploadPdfServlet extends HttpServlet {
                 out.println("</div>");
                 e.printStackTrace(out);
             }
-            
-            // 8. Navigation
+  
             out.println("<div style='margin-top: 30px; text-align: center;'>");
             out.println("<a href='image.jsp' style='padding: 10px 20px; background: #4e73df; color: white; text-decoration: none; border-radius: 5px; margin: 5px; display: inline-block;'>📤 Upload Another PDF</a>");
             out.println("<a href='register.jsp' style='padding: 10px 20px; background: #1cc88a; color: white; text-decoration: none; border-radius: 5px; margin: 5px; display: inline-block;'>📝 Back to Registration</a>");
@@ -193,8 +181,7 @@ public class UploadPdfServlet extends HttpServlet {
             e.printStackTrace(out);
         }
     }
-    
-    // Helper method to show database status
+
     private void showDatabaseStatus(PrintWriter out) {
         String sql = "SELECT " +
                     "COUNT(*) as total, " +

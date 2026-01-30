@@ -24,7 +24,6 @@ public class Loginservlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        /* ===== ADMIN LOGIN ===== */
         if (ADMIN_USERNAME.equals(username) && ADMIN_PASSWORD.equals(password)) {
 
             HttpSession session = request.getSession();
@@ -34,7 +33,6 @@ public class Loginservlet extends HttpServlet {
             return;
         }
 
-        /* ===== NORMAL USER LOGIN ===== */
         Usermodel user = new Usermodel();
         user.setusername(username);
         user.setpassword(password);

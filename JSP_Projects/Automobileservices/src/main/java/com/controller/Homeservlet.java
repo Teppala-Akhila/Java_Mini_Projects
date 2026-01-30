@@ -22,8 +22,7 @@ public class Homeservlet extends HttpServlet {
             response.sendRedirect("verify_invoice_ui.jsp");
 
         } else if ("qc".equals(action)) {
-            response.sendRedirect("qc_invoice_ui.jsp");
-
+            response.sendRedirect("qc");
         } else {
             response.sendRedirect("home.jsp");
         }

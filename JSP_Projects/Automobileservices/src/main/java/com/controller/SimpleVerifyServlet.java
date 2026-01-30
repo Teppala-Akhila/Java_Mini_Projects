@@ -30,14 +30,12 @@ public class SimpleVerifyServlet extends HttpServlet {
             
             if ("submit".equals(action)) {
 
-                /* -------- Invoice header -------- */
                 String vendorName    = request.getParameter("vendorName");
                 String invoiceNumber = request.getParameter("invoiceNumber");
                 String invoiceDate   = request.getParameter("invoiceDate");
                 String poNumber      = request.getParameter("poNumber");
                 double invoiceTotal  = Double.parseDouble(request.getParameter("invoiceTotal"));
 
-                /* -------- Item arrays -------- */
                 String[] itemNos    = request.getParameterValues("itemNo[]");
                 String[] itemNames  = request.getParameterValues("itemName[]");
                 String[] prices     = request.getParameterValues("itemPrice[]");
@@ -46,7 +44,6 @@ public class SimpleVerifyServlet extends HttpServlet {
                 String[] sgsts      = request.getParameterValues("itemSGST[]");
                 String[] totals     = request.getParameterValues("itemTotal[]");
 
-                /* -------- Comma builders -------- */
                 StringBuilder itemNoSb   = new StringBuilder();
                 StringBuilder itemNameSb = new StringBuilder();
                 StringBuilder qtySb      = new StringBuilder();
@@ -177,7 +174,6 @@ public class SimpleVerifyServlet extends HttpServlet {
         }
     }
 
-    /* ================= HELPER ================= */
     private void append(StringBuilder sb, String value) {
         if (sb.length() > 0) sb.append(",");
         sb.append(value == null ? "" : value.trim());

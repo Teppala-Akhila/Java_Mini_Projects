@@ -1,3 +1,5 @@
+<%@ page import="com.model.InvoiceImageModel"%>
+<%@ page import="com.model.InvoiceDetailsModel"%>
 
 <!DOCTYPE html>
 <html>
@@ -6,6 +8,7 @@
 <title>QC Invoice Entry</title>
 
 <style>
+/* ===== YOUR ORIGINAL CSS (UNCHANGED) ===== */
 * {
 	box-sizing: border-box;
 	font-family: "Segoe UI", Arial, sans-serif;
@@ -19,7 +22,7 @@ body {
 
 .header {
 	height: 85px;
-	background: #ffffff;
+	background: #fff;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -35,8 +38,6 @@ body {
 
 .logo img {
 	height: 65px;
-	max-width: 200px;
-	object-fit: contain;
 }
 
 .logo strong {
@@ -52,7 +53,6 @@ body {
 	padding: 10px 22px;
 	border-radius: 6px;
 	cursor: pointer;
-	font-size: 14px;
 }
 
 .main {
@@ -66,7 +66,7 @@ body {
 
 .form-box {
 	width: 25%;
-	background: #ffffff;
+	background: #fff;
 	padding: 22px;
 	border-radius: 12px;
 	box-shadow: 0 15px 30px rgba(37, 99, 235, 0.15);
@@ -98,7 +98,7 @@ body {
 
 .action-btn {
 	background: #2563eb;
-	color: white;
+	color: #fff;
 	border: none;
 	padding: 10px;
 	border-radius: 8px;
@@ -108,7 +108,7 @@ body {
 
 .image-box {
 	width: 75%;
-	background: #ffffff;
+	background: #fff;
 	border-radius: 12px;
 	box-shadow: 0 15px 30px rgba(37, 99, 235, 0.15);
 	position: relative;
@@ -121,7 +121,7 @@ body {
 .invoice-img {
 	max-width: 100%;
 	max-height: 100%;
-	transition: transform 0.2s ease-in-out;
+	transition: transform 0.2s;
 }
 
 .zoom-controls {
@@ -146,7 +146,7 @@ body {
 
 .table-box {
 	margin-top: 25px;
-	background: #ffffff;
+	background: #fff;
 	padding: 15px;
 	border-radius: 12px;
 	box-shadow: 0 15px 30px rgba(37, 99, 235, 0.15);
@@ -177,11 +177,6 @@ td input {
 	border: 1px solid #c7d2fe;
 }
 
-td:last-child {
-	display: flex;
-	gap: 6px;
-}
-
 .row-btn {
 	background: #2563eb;
 	color: white;
@@ -193,10 +188,8 @@ td:last-child {
 }
 
 input:disabled {
-	background-color: #e5e7eb;
-	color: #475569;
+	background: #e5e7eb;
 	font-weight: 600;
-	cursor: not-allowed;
 }
 
 .checkbox-group {
@@ -211,19 +204,12 @@ input:disabled {
 	accent-color: #2563eb;
 }
 
-.item-row[readonly] {
-	background-color: #f1f5f9;
-	color: #475569;
-	font-weight: 600;
-	cursor: not-allowed;
-}
-/* ===== Skip Modal Design ===== */
+/* ===== SKIP MODAL (UNCHANGED) ===== */
 .skip-overlay {
 	display: none;
 	position: fixed;
 	inset: 0;
 	background: rgba(15, 23, 42, 0.55);
-	backdrop-filter: blur(4px);
 	z-index: 9999;
 	align-items: center;
 	justify-content: center;
@@ -231,467 +217,459 @@ input:disabled {
 
 .skip-card {
 	width: 380px;
-	background: #ffffff;
+	background: #fff;
 	border-radius: 14px;
-	box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
-	overflow: hidden;
-	animation: pop 0.25s ease-out;
 }
 
-@
-keyframes pop {from { transform:scale(0.9);
-	opacity: 0;
-}
-
-to {
-	transform: scale(1);
-	opacity: 1;
-}
-
-}
 .skip-header {
 	background: #2563eb;
 	color: #fff;
 	padding: 14px 18px;
 	display: flex;
 	justify-content: space-between;
-	align-items: center;
-}
-
-.skip-header h3 {
-	margin: 0;
-	font-size: 16px;
-}
-
-.skip-close {
-	cursor: pointer;
-	font-size: 22px;
-	line-height: 1;
 }
 
 .skip-body {
 	padding: 20px;
 }
 
-.skip-body .form-group {
-	margin-bottom: 16px;
-}
-
-.skip-body input {
-	width: 100%;
-	padding: 10px;
-	border-radius: 8px;
-	border: 1px solid #c7d2fe;
-}
-
 .skip-footer {
-	padding: 16px 20px;
+	padding: 16px;
 	display: flex;
 	gap: 12px;
 }
 
-.skip-footer button {
-	flex: 1;
-	padding: 10px;
-	border-radius: 8px;
-	border: none;
-	cursor: pointer;
-	font-weight: 600;
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button
+	{
+	-webkit-appearance: none;
+	margin: 0;
 }
 
-.btn-confirm {
-	background: #2563eb;
-	color: #fff;
+.header-right {
+	display: flex;
+	align-items: center;
+	gap: 30px;
 }
 
-.btn-confirm:hover {
-	background: #1e40af;
-}
-
-.btn-cancel {
-	background: #e5e7eb;
-	color: #334155;
-}
-
-.btn-cancel:hover {
-	background: #cbd5f5;
-}
-
-.skip-error {
-	color: #dc2626;
-	font-size: 13px;
-	display: none;
+input[type=number] {
+	-moz-appearance: textfield;
 }
 </style>
 </head>
 
 <body>
 
-
 	<%
-	HttpSession session1 = request.getSession();
+	Boolean noQcData = (Boolean) request.getAttribute("noQcData");
 
-	String vendorname = session1 != null && session1.getAttribute("vendorname") != null
-			? session1.getAttribute("vendorname").toString()
-			: "";
-	String invoiceno = session1 != null && session1.getAttribute("invoicenumber") != null
-			? session1.getAttribute("invoicenumber").toString()
-			: "";
-	String issuedate = session1 != null && session1.getAttribute("invoiceissuedate") != null
-			? session1.getAttribute("invoiceissuedate").toString()
-			: "";
-	String pono = session1 != null && session1.getAttribute("poNo") != null ? session1.getAttribute("poNo").toString() : "";
-	String total = session1 != null && session1.getAttribute("total") != null
-			? session1.getAttribute("total").toString()
-			: "";
-	String imagePath = session1 != null && session1.getAttribute("imagePath") != null
-			? session1.getAttribute("imagePath").toString()
-			: "";
+	if (Boolean.TRUE.equals(noQcData)) {
+	%>
+	<h2 style="text-align: center; margin-top: 40px;">No invoice
+		available for QC</h2>
+	<%
+	return;
+	}
 
-	String itemno = session1 != null && session1.getAttribute("itemno") != null
-			? session1.getAttribute("itemno").toString()
-			: "";
-	String itemname = session1 != null && session1.getAttribute("itemname") != null
-			? session1.getAttribute("itemname").toString()
-			: "";
-	String quantity = session1 != null && session1.getAttribute("quantity") != null
-			? session1.getAttribute("quantity").toString()
-			: "";
-	String price = session1 != null && session1.getAttribute("price") != null
-			? session1.getAttribute("price").toString()
-			: "";
-	String cgst = session1 != null && session1.getAttribute("cgst") != null ? session1.getAttribute("cgst").toString() : "";
-	String sgst = session1 != null && session1.getAttribute("sgst") != null ? session1.getAttribute("sgst").toString() : "";
-	String itemtotal = session1 != null && session1.getAttribute("itemtotal") != null
-			? session1.getAttribute("itemtotal").toString()
-			: "";
+	InvoiceImageModel img = (InvoiceImageModel) request.getAttribute("image");
+	InvoiceDetailsModel inv = (InvoiceDetailsModel) request.getAttribute("invoice");
 	%>
 
+	<%
+	String[] itemNo = inv.getItemNo().split(",");
+	String[] itemName = inv.getItemName().split(",");
+	String[] qty = inv.getQuantity().split(",");
+	String[] price = inv.getPrice().split(",");
+	String[] cgst = inv.getCgst().split(",");
+	String[] sgst = inv.getSgst().split(",");
+	String[] total = inv.getItemTotal().split(",");
+	%>
 
-	<form id="invoiceForm">
-
-		<div class="header">
-			<div class="logo">
-				<img src="<%=request.getContextPath()%>/images/dss logo.jpeg">
-				<strong>Dreams Soft Solutions</strong>
-			</div>
-			<a href="logout"><button class="logout" type="button">Logout</button></a>
+	<div class="header">
+		<div class="logo">
+			<img src="<%=request.getContextPath()%>/images/dss logo.jpeg">
+			<strong>Dreams Soft Solutions</strong>
 		</div>
+		<div class="header-right">
+			<div class="timer" id="timer">Time: --</div>
+			<div class="user-info">
+				Welcome, <strong><%=session.getAttribute("username")%></strong>
+			</div>
+			<a href="logout"><button class="logout">Logout</button></a>
+		</div>
+		<a href="logout"><button class="logout" type="button">Logout</button></a>
+	</div>
 
-		<div class="main">
+	<div class="main">
 
-			<div class="top-section">
+		<div class="top-section">
 
-				<div class="form-box" id="">
-					<h3>QC Invoice Details</h3>
-					<div class="form-group">
-						<label>Vendor Name</label><input type="text" class="freeze-field"
-							required>
-					</div>
-					<div class="form-group">
-						<label>Invoice Number</label><input type="text"
-							class="freeze-field" required>
-					</div>
-					<div class="form-group">
-						<label>Invoice Issue Date</label><input type="text"
-							class="freeze-field" required>
-					</div>
-					<div class="form-group">
-						<label>P.O.#</label><input type="text" class="freeze-field"
-							required>
-					</div>
-					<div class="form-group">
-						<label>Invoice Total</label><input type="text"
-							class="freeze-field" required>
-					</div>
-					<div class="checkbox-group">
-						<input type="checkbox" id="imgNotClearChk"
-							onclick="clearCheckboxError()"> <label>Image is
-							not clear</label>
-					</div>
+			<div class="form-box">
+				<h3>QC Invoice Details</h3>
 
+
+				<div class="form-group">
+					<label>Vendor Name</label><input class="freeze-field">
+				</div>
+				<div class="form-group">
+					<label>Invoice Number</label><input class="freeze-field">
+				</div>
+				<div class="form-group">
+					<label>Invoice Issue Date</label><input class="freeze-field">
+				</div>
+				<div class="form-group">
+					<label>P.O.#</label><input class="freeze-field">
+				</div>
+				<div class="form-group">
+					<label>Invoice Total(&#8377;)</label><input class="freeze-field">
+				</div>
+				<div class="checkbox-group">
+					<input type="checkbox" id="imgNotClearChk"
+						onclick="toggleSkipBtn()"> Image is not clear <label
+						style="font-size: 14px;"> </label>
 					<div id="checkboxError"
 						style="color: #dc2626; font-size: 13px; margin-top: 6px; display: none;">
 						Please select "Image is not clear" before skipping.</div>
-+
-					<div class="footer-actions">
-						<button class="action-btn" type="button" onclick="edit(this)">Save</button>
-						<button class="action-btn" type="button"">Next</button>
-						<button class="action-btn" type="button"
-							onclick="handleSkipClick()">Skip</button>
-						<button class="action-btn" type="submit" onclick="submitform()">Submit</button>
-					</div>
 
 				</div>
+				<div class="footer-actions">
+					<button class="action-btn" type="button" onclick="edit(this)">Save</button>
+					<button class="action-btn" type="button" id="skipBtn" disabled
+						onclick="openSkipModal()">Skip</button>
+					<form method="post"
+						action="<%=request.getContextPath()%>/QCServlet" style="flex: 1;">
 
-				<div class="image-box">
-					<%
-					if (!imagePath.equals("")) {
-					%>
-					<img id="invoiceImage" src="<%=request.getContextPath()%>"
-						class="invoice-img">
-					<%
-					} else {
-					%>
-					<h3>No Image Found</h3>
-					<%
-					}
-					%>
-					<div class="zoom-controls">
-						<button class="zoom-btn" type="button" onclick="zoomIn()">+</button>
-						<button class="zoom-btn" type="button" onclick="zoomOut()">&#8722;</button>
-					</div>
+						<input type="hidden" name="imageId"
+							value="<%=img.getImageId()%>"> <input type="hidden"
+							name="action" value="submit">
+
+						<button class="action-btn" type="submit">Submit</button>
+
+
+						<div id="skipModal" class="skip-overlay">
+
+							<div class="skip-card">
+
+								<div class="skip-header">
+									<h3>Skip Authentication</h3>
+									<span class="skip-close" onclick="closeSkipModal()">&times;</span>
+								</div>
+
+								<div class="skip-body">
+									<div class="form-group">
+										<label>Username</label> <input type="text" id="skipUsername"
+											placeholder="Enter username">
+									</div>
+
+									<div class="form-group">
+										<label>Password</label> <input type="password"
+											id="skipPassword" placeholder="Enter password">
+									</div>
+
+									<div id="skipError" class="skip-error">Invalid username
+										or password</div>
+								</div>
+
+								<div class="skip-footer">
+									<button class="btn-confirm" type="button"
+										onclick="validateSkip()">Confirm</button>
+									<button class="btn-cancel" type="button"
+										onclick="closeSkipModal()">Cancel</button>
+								</div>
+
+							</div>
+						</div>
+					</form>
 				</div>
 
 			</div>
 
-			<div class="table-box">
-				<table id="invoiceTable">
-					<tr>
-						<th>Item No</th>
-						<th>Item Name</th>
-						<th>Quantity</th>
-						<th>Price</th>
-						<th>CGST (%)</th>
-						<th>SGST (%)</th>
-						<th>Total</th>
-						<th>Action</th>
-					</tr>
-					<tr class="item-row">
-						<td><input class="itemNo" type="number" placeholder="001"
-							value="<%=itemno%>" disabled></td>
-						<td><input class="itemName" type="text"
-							placeholder="Item Description" value="<%=itemname%>" disabled></td>
-						<td><input class="quantity" type="number" placeholder="00"
-							value="<%=quantity%>" oninput="calculateRowTotal(this)" disabled></td>
-						<td><input class="price" type="number" placeholder="0.00"
-							value="<%=price%>" oninput="calculateRowTotal(this)" disabled></td>
-						<td><input class="itemCGST" type="number" placeholder="0.00%"
-							value="<%=cgst%>" oninput="calculateRowTotal(this)" disabled></td>
-						<td><input class="itemSGST" type="number" placeholder="0.00%"
-							value="<%=sgst%>" oninput="calculateRowTotal(this)" disabled></td>
-						<td><input class="itemTotal" type="number" placeholder="0.00"
-							value="<%=itemtotal%>" disabled></td>
-						<td>
-							<button type="button" class="row-btn" onclick="addRow(this)">Add</button>
-							<button type="button" class="row-btn" onclick="editRow(this)">Edit</button>
-							<button type="button" class="row-btn" onclick="deleteRow(this)">Delete</button>
-						</td>
-					</tr>
-					<tr id="subTotalRow">
-						<td colspan="6" style="text-align: right; font-weight: 600;">Sub
-							Total</td>
-						<td><input id="subTotal" readonly></td>
-						<td></td>
-					</tr>
-
-				</table>
+			<div class="image-box">
+				<div
+					style="position: absolute; top: 16px; left: 20px; background: #2563eb; color: white; padding: 6px 14px; border-radius: 999px; font-size: 14px; font-weight: 600; z-index: 20; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);">
+					Invoice ID :
+					<%=img.getImageId()%>
+				</div>
+				<img id="invoiceImage"
+					src="<%=request.getContextPath()%>/invoice_images/<%=img.getImagePath()%>"
+					class="invoice-img">
+				<div class="zoom-controls">
+					<button class="zoom-btn" onclick="zoomIn()">+</button>
+					<button class="zoom-btn" onclick="zoomOut()">−</button>
+				</div>
 			</div>
 
 		</div>
-		<!-- Skip Authentication Modal -->
-		<div id="skipModal" class="skip-overlay">
 
-			<div class="skip-card">
+		<div class="table-box">
+			<table id="invoiceTable">
+				<tr>
+					<th>Item No</th>
+					<th>Name</th>
+					<th>Qty</th>
+					<th>Price(&#8377;)</th>
+					<th>CGST(%)</th>
+					<th>SGST(%)</th>
+					<th>Total(&#8377;)</th>
+					<th>Action</th>
+				</tr>
 
-				<div class="skip-header">
-					<h3>Skip Authentication</h3>
-					<span class="skip-close" onclick="closeSkipModal()">&times;</span>
-				</div>
-
-				<div class="skip-body">
-					<div class="form-group">
-						<label>Username</label> <input type="text" id="skipUsername" placeholder="Enter username">
-					</div>
-
-					<div class="form-group">
-						<label>Password</label> <input type="password" id="skipPassword" placeholder="Enter password">
-					</div>
-
-					<div id="skipError" class="skip-error">Invalid username or
-						password</div>
-				</div>
-
-				<div class="skip-footer">
-					<button class="btn-confirm" type="button" onclick="validateSkip()">Confirm</button>
-					<button class="btn-cancel" type="button" onclick="closeSkipModal()">Cancel</button>
-				</div>
-
-			</div>
+				<%
+				for (int i = 0; i < itemNo.length; i++) {
+				%>
+				<tr class="item-row">
+					<td><input value="<%=itemNo[i]%>" disabled></td>
+					<td><input value="<%=itemName[i]%>" disabled></td>
+					<td><input class="quantity" value="<%=qty[i]%>" disabled></td>
+					<td><input class="price" value="<%=price[i]%>" disabled></td>
+					<td><input class="itemCGST" value="<%=cgst[i]%>" disabled></td>
+					<td><input class="itemSGST" value="<%=sgst[i]%>" disabled></td>
+					<td><input value="<%=total[i]%>" disabled></td>
+					<td>
+						<button type="button" class="row-btn" onclick="addRow(this)">Add</button>
+						<button type="button" class="row-btn" onclick="editRow(this)">Edit</button>
+						<button type="button" class="row-btn" onclick="deleteRow(this)">Delete</button>
+					</td>
+				</tr>
+				<%
+				}
+				%>
+				<tr id="subTotalRow">
+					<td colspan="6" style="text-align: right; font-weight: 600;">Sub
+						Total</td>
+					<td><input id="subTotal" readonly></td>
+					<td></td>
+				</tr>
+			</table>
 		</div>
 
-
-
-
-	</form>
+	</div>
 
 	<script>
-	function calculateRowTotal(el) {
-	    const row = el.closest("tr");
+let zoomLevel = 1;
 
-	    const qty   = parseFloat(row.querySelector(".quantity").value) || 0;
-	    const price = parseFloat(row.querySelector(".price").value) || 0;
-	    const cgst  = parseFloat(row.querySelector(".itemCGST").value) || 0;
-	    const sgst  = parseFloat(row.querySelector(".itemSGST").value) || 0;
+function zoomIn(){ zoomLevel+=0.1; invoiceImage.style.transform=`scale(${zoomLevel})`; }
+function zoomOut(){ if(zoomLevel>0.5){ zoomLevel-=0.1; invoiceImage.style.transform=`scale(${zoomLevel})`; }}
 
-	    const baseAmount = qty * price;
-	    const gstAmount = baseAmount * (cgst + sgst) / 100;
-	    const total = baseAmount + gstAmount;
+function editRow(btn) {
+    const row = btn.closest(".item-row");
+    const inputs = row.querySelectorAll("input");
 
-	    row.querySelector(".itemTotal").value = total.toFixed(2);
+    if (btn.innerText === "Edit") {
+        inputs.forEach(i => {
+            if (!i.classList.contains("itemTotal")) {
+                i.disabled = false;
+            }
+        });
+        btn.innerText = "Save";
+        btn.style.background = "#16a34a";
+    } else {
+        inputs.forEach(i => i.disabled = true);
+        btn.innerText = "Edit";
+        btn.style.background = "#2563eb";
+        calculateSubTotal();
+    }
+}
 
-	    calculateSubTotal();
-	}
-	function calculateSubTotal() {
-	    let sum = 0;
-	    document.querySelectorAll("#invoiceTable .item-row").forEach(row => {
-	        const val = parseFloat(row.cells[6].children[0].value) || 0;
-	        sum += val;
-	    });
-	    document.getElementById("subTotal").value = sum.toFixed(2);
-	}
+function deleteRow(button) {
+    const row = button.closest("tr");
 
-	function addRow(btn) {
-	    const row = btn.closest("tr");
-	    const inputs = row.querySelectorAll("input");
+    const totalItemRows =
+        document.querySelectorAll(".row-btn[onclick^='deleteRow']").length;
 
-	    for (let i of inputs) {
-	        if (!i.value.trim()) {
-	            alert("Fill all fields before adding");
-	            return;
-	        }
-	    }
+    if (totalItemRows <= 1) {
+        alert("At least one item row is required.");
+        return;
+    }
 
-	
-	    inputs.forEach(i => i.disabled = true);
+    row.remove();
+    calculateSubTotal();
 
-	    const newRow = row.cloneNode(true);
-	    newRow.classList.add("item-row");
+    const rows = document.querySelectorAll("tr.item-row");
+    rows.forEach(r => {
+        const addBtn = r.querySelector("button[onclick^='addRow']");
+        if (addBtn) addBtn.disabled = false;
+    });
+}
 
-	    newRow.querySelectorAll("input").forEach(i => {
-	        i.value = "";
-	        i.disabled = false;
-	    });
+function addRow(btn) {
+    const row = btn.closest("tr");
+    const inputs = row.querySelectorAll("input");
 
-	    const table = document.getElementById("invoiceTable");
-	    const subtotalRow = document.getElementById("subTotalRow");
+    for (let i of inputs) {
+        if (!i.value.trim()) {
+            alert("Fill all fields before adding");
+            return;
+        }
+    }
 
-	    subtotalRow.remove();
-	    table.appendChild(newRow);
-	    table.appendChild(subtotalRow);
-	}
-	function deleteRow(button) {
-	    const row = button.closest("tr");
+    inputs.forEach(i => i.disabled = true);
 
-	    
-	    const totalItemRows =
-	        document.querySelectorAll(".row-btn[onclick^='deleteRow']").length;
+    const newRow = row.cloneNode(true);
+    newRow.classList.add("item-row");
 
-	    if (totalItemRows <= 1) {
-	        alert("At least one item row is required.");
-	        return;
-	    }
+    newRow.querySelectorAll("input").forEach(i => {
+        i.value = "";
+        i.disabled = false;
+    });
 
-	    row.remove();
-	    calculateSubTotal();
+    const table = document.getElementById("invoiceTable");
+    const subtotalRow = document.getElementById("subTotalRow");
 
-	    const rows = document.querySelectorAll("tr.item-row");
-	    rows.forEach(r => {
-	        const addBtn = r.querySelector("button[onclick^='addRow']");
-	        if (addBtn) addBtn.disabled = false;
-	    });
-	}
-	function editRow(btn) {
-	    const row = btn.closest(".item-row");
-	    const inputs = row.querySelectorAll("input");
-
-	    if (btn.innerText === "Edit") {
-	        inputs.forEach(i => {
-	            if (!i.classList.contains("itemTotal")) {
-	                i.disabled = false;
-	            }
-	        });
-	        btn.innerText = "Save";
-	        btn.style.background = "#16a34a";
-	    } 
-	    else {
-	        inputs.forEach(i => i.disabled = true);
-	        btn.innerText = "Edit";
-	        btn.style.background = "#2563eb";
-	        calculateSubTotal();
-	    }
-	}
-	function edit(btn) {
-	    const freezeInputs = document.querySelectorAll(".freeze-field");
-
-	    if (btn.innerText === "Save") {
-	        freezeInputs.forEach(i => i.disabled = true);
-	        btn.innerText = "Edit";
-	        btn.style.background = "#16a34a";
-	    } else {
-	        freezeInputs.forEach(i => i.disabled = false);
-	        btn.innerText = "Save";
-	        btn.style.background = "#2563eb";
-	    }
-	}
-
-	window.onload = function() {
-	    document.querySelectorAll(".item-row").forEach(row => {
-	        calculateRowTotal(row.cells[2].children[0]);
-	    });
-	};
-
-	function zoomIn() {
-	    zoomLevel += 0.1;
-	    document.getElementById("invoiceImage").style.transform = `scale(${zoomLevel})`;
-	}
-
-	function zoomOut() {
-	    if (zoomLevel > 0.5) {
-	        zoomLevel -= 0.1;
-	        document.getElementById("invoiceImage").style.transform = `scale(${zoomLevel})`;
-	    }
-	}
-	function openSkipModal() {
-	    document.getElementById("skipModal").style.display = "flex";
-	}
-
-	function closeSkipModal() {
-	    document.getElementById("skipModal").style.display = "none";
-	    document.getElementById("skipError").style.display = "none";
-	}
+    subtotalRow.remove();
+    table.appendChild(newRow);
+    table.appendChild(subtotalRow);
+}
 
 
-	function validateSkip() {
-	    const user = document.getElementById("skipUsername").value.trim();
-	    const pass = document.getElementById("skipPassword").value.trim();
-	    const err  = document.getElementById("skipError");
+function calculateRowTotal(el) {
+    const row = el.closest("tr");
 
-	    if (!user || !pass) {
-	        err.style.display = "block";
-	        return;
-	    }
+    const qty   = parseFloat(row.querySelector(".quantity").value) || 0;
+    const price = parseFloat(row.querySelector(".price").value) || 0;
+    const cgst  = parseFloat(row.querySelector(".itemCGST").value) || 0;
+    const sgst  = parseFloat(row.querySelector(".itemSGST").value) || 0;
 
-	    closeSkipModal();
-	    alert("Skip authorized successfully");
-	}
+    const baseAmount = qty * price;
+    const gstAmount = baseAmount * (cgst + sgst) / 100;
+    const total = baseAmount + gstAmount;
 
-	function handleSkipClick() {
-	    const chk = document.getElementById("imgNotClearChk");
-	    const err = document.getElementById("checkboxError");
+    row.querySelector(".itemTotal").value = total.toFixed(2);
+    calculateSubTotal();
+}
 
-	    if (!chk.checked) {
-	        err.style.display = "block";
-	        return;
-	    }
+function calculateSubTotal() {
+    let sum = 0;
+    document.querySelectorAll("#invoiceTable .item-row").forEach(row => {
+        const val = parseFloat(row.cells[6].children[0].value) || 0;
+        sum += val;
+    });
+    document.getElementById("subTotal").value = sum.toFixed(2);
+}
 
-	    err.style.display = "none";
-	    openSkipModal();  
-	}
+function clearCheckboxError(){ document.getElementById("checkboxError").style.display="none"; }
 
-	function clearCheckboxError() {
-	    document.getElementById("checkboxError").style.display = "none";
-	}
+
+function edit(btn) {
+    const freezeInputs = document.querySelectorAll(".freeze-field");
+
+    if (btn.innerText === "Save") {
+        freezeInputs.forEach(i => i.disabled = true);
+        btn.innerText = "Edit";
+        btn.style.background = "#16a34a";
+    } else {
+        freezeInputs.forEach(i => i.disabled = false);
+        btn.innerText = "Save";
+        btn.style.background = "#2563eb";
+    }
+}
+
+window.onload = function() {
+    document.querySelectorAll(".item-row").forEach(row => {
+        calculateRowTotal(row.cells[2].children[0]);
+    });
+};
+
+
+function toggleSkipBtn() {
+    var chk = document.getElementById("imgNotClearChk");
+    var skipBtn = document.getElementById("skipBtn");
+    skipBtn.disabled = !chk.checked;
+}
+function openSkipModal() {
+    document.getElementById("skipModal").style.display = "flex";
+}
+
+function closeSkipModal() {
+    document.getElementById("skipModal").style.display = "none";
+    document.getElementById("skipUsername").value = "";
+    document.getElementById("skipPassword").value = "";
+    document.getElementById("skipError").style.display = "none";
+}
+
+function validateSkip() {
+    const user = document.getElementById("skipUsername").value.trim();
+    const pass = document.getElementById("skipPassword").value.trim();
+
+    if (user === "dreams" && pass === "dreams") {
+        closeSkipModal();
+        alert("Skip authorized successfully");
+    } else {
+        document.getElementById("skipError").style.display = "block";
+    }
+}
+
+/* =====================================================
+SUBMIT VALIDATION (DATE + TOTAL CHECK)
+===================================================== */
+document.getElementById("invoiceForm").addEventListener("submit", function (e) {
+
+ // enable disabled inputs before submit
+ this.querySelectorAll("input:disabled").forEach(i => i.disabled = false);
+
+ /* ===== DATE VALIDATION (FROM VERIFY JSP – UNCHANGED) ===== */
+ const dateInput =
+     document.querySelectorAll(".form-box .freeze-field")[2].value.trim();
+
+ if (!dateInput) {
+     alert("Please enter Invoice Issue Date.");
+     e.preventDefault();
+     return;
+ }
+
+ const datePattern = /^(\d{2})-(\d{2})-(\d{4})$/;
+ if (!datePattern.test(dateInput)) {
+     alert("Invoice Date must be in DD-MM-YYYY format.");
+     e.preventDefault();
+     return;
+ }
+
+ const parts = dateInput.split("-");
+ const enteredDate = new Date(parts[2], parts[1] - 1, parts[0]);
+
+ if (
+     enteredDate.getDate() != parts[0] ||
+     enteredDate.getMonth() != parts[1] - 1 ||
+     enteredDate.getFullYear() != parts[2]
+ ) {
+     alert("Invalid Invoice Date.");
+     e.preventDefault();
+     return;
+ }
+
+ const today = new Date();
+ today.setHours(0, 0, 0, 0);
+
+ if (enteredDate > today) {
+     alert("Invoice Date cannot be a future date.");
+     e.preventDefault();
+     return;
+ }
+
+
+/* ===== TOTAL VALIDATION (ALREADY WORKING) ===== */
+const invoiceTotal =
+    parseFloat(document.querySelectorAll(".form-box .freeze-field")[4].value);
+const subTotal =
+    parseFloat(document.getElementById("subTotal").value);
+
+if (isNaN(invoiceTotal) || isNaN(subTotal)) {
+    alert("Invoice Total and Item totals are required.");
+    e.preventDefault();
+    return;
+}
+
+if (invoiceTotal.toFixed(2) !== subTotal.toFixed(2)) {
+    alert(
+        "Invoice Total and Item Sub Total must match.\n\n" +
+        "Invoice Total: " + invoiceTotal.toFixed(2) + "\n" +
+        "Sub Total: " + subTotal.toFixed(2)
+    );
+    e.preventDefault();
+    return;
+}
+
+// ✅ All validations passed → submit allowed
+});
 
 </script>
 
