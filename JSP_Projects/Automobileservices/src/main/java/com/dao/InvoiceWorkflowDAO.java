@@ -6,6 +6,7 @@ import java.sql.*;
 
 public class InvoiceWorkflowDAO {
 
+    // ================= VERIFY USER =================
     public InvoiceImageModel getNextImageForUser(String username) {
 
         String sql =
@@ -51,6 +52,7 @@ public class InvoiceWorkflowDAO {
         }
     }
 
+    // ================= QC USER =================
     public InvoiceImageModel getNextImageForQC(String qcUser) {
 
         String sql =
@@ -96,6 +98,7 @@ public class InvoiceWorkflowDAO {
         }
     }
 
+    // ================= QC SAVE =================
     public boolean saveQCData(int imageId, String qcUser, String errors) {
 
         String sql =
