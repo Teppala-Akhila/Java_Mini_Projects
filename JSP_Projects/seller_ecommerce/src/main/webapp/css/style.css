@@ -1,0 +1,188 @@
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1d2671, #c33764, #1d976c);
+    background-size: 300% 300%;
+    animation: bgShift 10s ease infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@keyframes bgShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.box,
+.product-box {
+    background: linear-gradient(180deg, #ffffff, #f0f9ff);
+    width: 420px;
+    padding: 26px;
+    border-radius: 14px;
+    border: 2px solid #a78bfa;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+}
+
+.box h2,
+.product-box h2 {
+    text-align: center;
+    margin-bottom: 22px;
+    font-size: 26px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #ff6a00, #ee0979, #7c3aed);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 2px;
+}
+
+table {
+    width: 100%;
+}
+td {
+    font-size: 14px;
+    color: #111827;
+    padding: 6px 0;
+    font-weight: 600;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="email"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #93c5fd;
+    border-radius: 6px;
+    background: #ffffff;
+    transition: all 0.25s ease;
+}
+
+
+
+input::placeholder,
+textarea::placeholder {
+    color: #6b7280;
+}
+
+textarea {
+    resize: none;
+    height: 70px;
+}
+
+input:focus,
+textarea:focus {
+    border-color: #ec4899;
+    box-shadow: 0 0 8px rgba(236, 72, 153, 0.6);
+    outline: none;
+}
+input[type="submit"] {
+    width: 100%;
+    padding: 11px;
+    background: linear-gradient(135deg, #7c3aed, #ec4899);
+    border: none;
+    color: #ffffff;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 10px;
+}
+
+input[type="submit"]:hover {
+    background: linear-gradient(135deg, #2563eb, #06b6d4);
+}
+.links {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.links a {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    color: #7c3aed;
+}
+
+.links a:hover {
+    text-decoration: underline;
+}
+
+.register-table {
+    border-spacing: 0;
+}
+
+.register-table td {
+    width: 100%;
+    display: block;
+}
+
+/* ===== PASSWORD UI ===== */
+
+.password-checklist {
+margin-top:10px;
+font-size:13px;
+}
+
+.password-checklist div {
+margin-bottom:4px;
+color:#dc3545;
+}
+
+.password-checklist .valid {
+color:#28a745;
+}
+
+.password-checklist div.valid {
+    color: #28a745 !important;
+    font-weight: 600;
+}
+
+.strength-bar {
+height:6px;
+width:100%;
+background:#eee;
+border-radius:5px;
+margin-top:8px;
+overflow:hidden;
+}
+
+.strength-fill {
+height:100%;
+width:0%;
+background:red;
+transition:0.3s;
+}
+
+.match-msg{
+margin-top:8px;
+font-size:13px;
+}
+/* ===== PASSWORD CHECKLIST GREEN STYLE ===== */
+
+.password-checklist div.valid{
+color:#28a745 !important;
+font-weight:600;
+}
+
+/* REMOVE ℹ ICON WHEN PASSWORD STRONG */
+
+.input-hint.strong::before{
+content:"";
+display:none;
+}
+.input-hint.strong::before{
+display:none;
+}
+/* STRONG PASSWORD ICON REMOVE */
+
+.input-hint.strong::before{
+display:none !important;
+}
